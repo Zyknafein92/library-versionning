@@ -1,8 +1,8 @@
 package com.library.bookmicroservice.controller;
 
 import com.library.bookmicroservice.model.Book;
-import com.library.bookmicroservice.services.BookDTO;
-import com.library.bookmicroservice.services.BookService;
+import com.library.bookmicroservice.services.book.BookDTO;
+import com.library.bookmicroservice.services.book.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
