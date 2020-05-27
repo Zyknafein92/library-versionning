@@ -1,0 +1,153 @@
+<div class="container">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="well-block">
+        <div class="well-title">
+          <br>
+          <div class="card" *ngIf="user">
+            <div class="card-header" style="text-align: center">
+              <h3>Mon compte :</h3>
+            </div>
+
+            <br>
+
+            <div class="card-body">
+              <h5 class="card-title">Mes informations :</h5>
+              <div class="card-deck">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-md-3">
+                        <h5 class="card-title">Nom:</h5>
+                        <p class="card-text">{{user.lastName}}</p>
+                      </div>
+                      <div class="col-md-3">
+                        <h5 class="card-title">Prénom:</h5>
+                        <p class="card-text">{{user.firstName}}</p>
+                      </div>
+                      <div class="col-md-6">
+                        <h5 class="card-title">Date de naissance : </h5>
+                        <p class="card-text">{{user.birthday | date:'dd/MM/yyyy'}}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-body">
+              <h5 class="card-title">Mes coordonnées :</h5>
+              <div class="card-deck">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <h5 class="card-title">Téléphone :</h5>
+                        <p class="card-text">{{user.phone}}</p>
+                      </div>
+                      <div class="col-md-6">
+                        <h5 class="card-title">Email:</h5>
+                        <p class="card-text">{{user.email}}</p>
+                      </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <h5 class="card-title">Adresse:</h5> <span></span>
+                        <p class="card-text">{{user.address}}</p>
+                      </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <h5 class="card-title">Ville:</h5> <span></span>
+                        <p class="card-text">{{user.city}}</p>
+                      </div>
+                      <div class="col-md-6">
+                        <h5 class="card-title">Code Postal:</h5> <span></span>
+                        <p class="card-text">{{user.postalCode}}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="btn-group">
+              <div class="col-md-3"></div>
+              <div class="col-md-3">
+                <td>
+                  <button type="button" class="btn btn-info" data-toggle="modal" data-target="#updateUser">Modifier le profil</button>
+                </td>
+              </div>
+
+              <div class="col-md-3">
+                <td>
+                  <button type="button" class="btn btn-danger" (click)="deleteUser(user)">Supprimer mon compte</button>
+                </td>
+                <br>
+              </div>
+            </div>
+          </div>
+
+          <br>
+
+          <div class="card" *ngIf="user">
+            <div class="card-header" style="text-align: center">
+              <h3>Mes emprunts :</h3>
+            </div>
+
+            <div class="card-body">
+              <div class="card-deck">
+                <table class="table table-responsive">
+                  <table class="table table-hover table-condensed table-striped">
+                    <thead class="borrow">
+                    <tr>
+                      <th>Titre du livre</th>
+                      <th>Date de l'emprunt</th>
+                      <th>Date de retour</th>
+                      <th>Possibilité d'étendre le prêt</th>
+                      <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="clickableRow"  *ngFor="let borrow of borrows">
+                      <td>{{borrow.bookID}}</td>
+                      <td>{{borrow.dateStart | date: 'dd/MM/yyyy'}}</td>
+                      <td *ngIf="borrow.isExtend == false">{{borrow.dateEnd | date: 'dd/MM/yyyy'}}</td>
+                      <td *ngIf="borrow.isExtend == true">{{borrow.dateExtend | date: 'dd/MM/yyyy'}}</td>
+                      <td>{{borrow.isExtend ? 'Non' : 'Oui'}}</td>
+                      <td><button type="button" class="btn btn-info" *ngIf=" borrow.isExtend == false" (click)="extendBorrow(this.borrow.id)">Prolonger l'emprunt</button></td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </table>
+
+              </div>
+
+
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div  *ngIf="user" class="modal fade" id="updateUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-body">
+            <app-update-user [user]="user "></app-update-user>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="refreshUser()">Fermer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

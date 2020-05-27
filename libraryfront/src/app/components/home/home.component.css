@@ -1,0 +1,17 @@
+.title1 {
+  font-style: italic;
+  font-weight: bolder;
+  font-size: 60px;
+  font-family: 'French Script MT', serif;
+}
+
+.stitle1 {
+  font-family: 'Comic Sans MS', serif;
+  font-weight: bolder;
+  font-style: italic;
+  font-size: 20px;
+}
+
+.card {
+  border-width: 0;
+}

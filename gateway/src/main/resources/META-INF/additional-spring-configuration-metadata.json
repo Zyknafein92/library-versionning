@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "Biblio.app.jwtExpiration",
+      "type": "java.lang.String",
+      "description": "Description for Biblio.app.jwtExpiration."
+  }
+] }

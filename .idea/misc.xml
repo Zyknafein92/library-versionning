@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JavaScriptSettings">
+    <option name="languageLevel" value="ES6" />
+  </component>
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/library/book-microservice/pom.xml" />
+        <option value="$PROJECT_DIR$/library/borrow-microservice/pom.xml" />
+        <option value="$PROJECT_DIR$/library/eureka-server/pom.xml" />
+        <option value="$PROJECT_DIR$/library/gateway/pom.xml" />
+        <option value="$PROJECT_DIR$/library/library-microservice/pom.xml" />
+        <option value="$PROJECT_DIR$/library/user-microservice/pom.xml" />
+        <option value="$PROJECT_DIR$/book-microservice/pom.xml" />
+        <option value="$PROJECT_DIR$/borrow-microservice/pom.xml" />
+        <option value="$PROJECT_DIR$/eureka-server/pom.xml" />
+        <option value="$PROJECT_DIR$/gateway/pom.xml" />
+        <option value="$PROJECT_DIR$/library-microservice/pom.xml" />
+        <option value="$PROJECT_DIR$/user-microservice/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="false" project-jdk-name="13" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
+</project>

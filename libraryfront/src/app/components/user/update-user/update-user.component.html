@@ -1,0 +1,205 @@
+<br>
+<div class="container">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="well-block">
+        <div class="well-title">
+
+
+          <div class="card">
+            <div class="card-header" style="text-align: center"><h3>Modifier votre profil</h3></div>
+          </div>
+
+          <form #f="ngForm" [formGroup]="forms" (ngSubmit)="updateUser()">
+            <br>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group"
+                     [class.has-success]="forms.get('firstName').valid"
+                     [class.has-error]="forms.get('firstName').invalid && forms.get('firstName').touched">
+                  <div class="alert alert-danger" [hidden]="forms.get('firstName').valid || !forms.get('firstName').touched">Le prénom doit posséder au moins 2 lettres.</div>
+                  <label class="control-label">Prénom:</label>
+                  <input class="form-control"
+                         type="text"
+                         name="firstName"
+                         placeholder="Prénom"
+                         formControlName="firstName"
+                         required minlength="2">
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="form-group"
+                     [class.has-success]="forms.get('lastName').valid"
+                     [class.has-error]="forms.get('lastName').invalid && forms.get('lastName').touched">
+                  <div class="alert alert-danger" [hidden]="forms.get('lastName').valid || !forms.get('lastName').touched">Le nom doit posséder au moins 2 lettres.</div>
+                  <label class="control-label">Nom:</label>
+                  <input class="form-control input-md"
+                         type="text"
+                         name="lastName"
+                         placeholder="Nom"
+                         formControlName="lastName"
+                         required
+                         minlength="2">
+                </div>
+              </div>
+
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group"
+                     [class.has-success]="forms.get('birthday').valid"
+                     [class.has-error]="forms.get('birthday').invalid && forms.get('birthday').touched">
+                  <div class="alert alert-danger" [hidden]="forms.get('birthday').valid || !forms.get('birthday').touched">La date de naissance doit être renseignée.</div>
+                  <label class="control-label">Date de Naissance:</label>
+                  <input class="form-control input-md"
+                         type="Date"
+                         name="Date de Naissance"
+                         placeholder="birthday"
+                         formControlName="birthday"
+                         autocapitalize="on"
+                         spellcheck="on"
+                         required/>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="form-group"
+                     [class.has-success]="forms.get('phone').valid"
+                     [class.has-error]="forms.get('phone').invalid && forms.get('phone').touched">
+                  <div class="alert alert-danger" [hidden]="forms.get('phone').valid || !forms.get('phone').touched">Le numéro de téléphone doit être composé de 10 chiffres.</div>
+                  <label class="control-label">Numéro de téléphone:</label>
+                  <input class="form-control input-md"
+                         type="phone"
+                         name="phone"
+                         minlength="10"
+                         maxlength="10"
+                         placeholder="Numéro de téléphone"
+                         formControlName="phone"
+                         required>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group"
+                     [class.has-success]="forms.get('address').valid"
+                     [class.has-error]="forms.get('address').invalid && forms.get('address').touched">
+                  <div class="alert alert-danger" [hidden]="forms.get('address').valid || !forms.get('address').touched">L'adresse doit être renseignée</div>
+                  <label class="control-label">Entrez votre addresse postale :</label>
+                  <input class="form-control input-md"
+                         type="address"
+                         name="address"
+                         placeholder="Entrez votre adresse"
+                         formControlName="address"
+                         minlength="5"
+                         required>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group"
+                     [class.has-success]="forms.get('city').valid"
+                     [class.has-error]="forms.get('city').invalid && forms.get('city').touched">
+                  <div class="alert alert-danger" [hidden]="forms.get('city').valid || !forms.get('city').touched">Le nom de la ville doit être renseignée</div>
+                  <label class="control-label">Entrez le nom de votre ville:</label>
+                  <input class="form-control input-md"
+                         type="city"
+                         name="city"
+                         placeholder="Entrez le nom de votre ville"
+                         formControlName="city"
+                         minlength="1"
+                         required>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group"
+                     [class.has-success]="forms.get('postalCode').valid"
+                     [class.has-error]="forms.get('postalCode').invalid && forms.get('postalCode').touched">
+                  <div class="alert alert-danger" [hidden]="forms.get('postalCode').valid || !forms.get('postalCode').touched">Le code postal doit contenir 5 chiffres et être valide</div>
+                  <label class="control-label">Entrez votre code postal:</label>
+                  <input class="form-control input-md"
+                         type="postalCode"
+                         name="postalCode"
+                         placeholder="Entrez le code postal de votre ville"
+                         formControlName="postalCode"
+                         minlength="5"
+                         maxlength="5"
+                         required>
+                </div>
+              </div>
+            </div>
+
+
+            <!--            <div class="row">-->
+            <!--              <div class="col-md-6">-->
+            <!--                <div class="form-group"-->
+            <!--                     [class.has-success]="forms.get('password').valid"-->
+            <!--                     [class.has-error]="forms.get('password').invalid && forms.get('password').touched">-->
+            <!--                  <div class="alert alert-danger" [hidden]="forms.get('password').valid || !forms.get('password').touched">Le password doit contenir au moins 6 caractères ou chiffres.</div>-->
+            <!--                  <label class="control-label">Mot de passe:</label>-->
+            <!--                  <input class="form-control input-md"-->
+            <!--                         type="password"-->
+            <!--                         name="password"-->
+            <!--                         placeholder="Mot de passe"-->
+            <!--                         formControlName="password"-->
+            <!--                         minlength="6"-->
+            <!--                         required>-->
+            <!--                </div>-->
+            <!--              </div>-->
+            <!--            </div>-->
+
+            <br>
+            <div class="col-md-12" align="right">
+              <div class="form-group">
+                <button
+                  type="submit"
+                  class="btn btn-primary" [disabled]="forms.invalid">Valider
+                </button>
+              </div>
+            </div>
+          </form>
+ <hr>
+          <form #p ="ngForm" [formGroup]="formsPassword" (ngSubmit)="updatePassword()">
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group"
+                     [class.has-success]="formsPassword.get('password').valid"
+                     [class.has-error]="formsPassword.get('password').invalid && formsPassword.get('password').touched">
+                  <div class="alert alert-danger" [hidden]="formsPassword.get('password').valid || !formsPassword.get('password').touched">Le password doit contenir au moins 6 caractères ou chiffres.</div>
+                  <label class="control-label">Entrez votre nouveau password si vous souhaitez le modifier:</label>
+                  <input class="form-control input-md"
+                         type="password"
+                         name="password"
+                         placeholder="Mot de passe"
+                         formControlName="password"
+                         minlength="6"
+                         required>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-12" align="right">
+              <div class="form-group">
+                <button
+                  type="submit"
+                  class="btn btn-primary" [hidden]="formsPassword.invalid">Changer de mot de passe
+                </button>
+              </div>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

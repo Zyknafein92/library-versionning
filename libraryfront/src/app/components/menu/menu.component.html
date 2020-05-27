@@ -1,0 +1,28 @@
+<nav class="navbar navbar-expand-lg bg-light navbar-info">
+  <div class="container">
+    <ul class="nav navbar-nav" routerLinkActive="active">
+      <li class="nav-item"><a class="nav-link" routerLink="home">Acceuil</a></li>
+      <li class="nav-item"><a class="nav-link" routerLink="my-profil" *ngIf="this.tokenEmail != null">Mon Profil</a></li>
+      <li class="nav-item"><a class="nav-link" routerLink="search">Rechercher</a></li>
+      <li class="nav-item"><a class="nav-link" routerLink="contacts">Nos librairies</a></li>
+    </ul>
+
+    <ul class="navbar-nav ml-auto" >
+      <li class="identification" *ngIf="this.tokenEmail == null">
+        <a class="nav-link"  routerLink="Login">S'identifier</a>
+      </li>
+
+      <li class="identification" *ngIf="this.tokenEmail == 'deneux.j@gmail.com'">
+        <a class="nav-link"  routerLink="admin">Admin</a>
+      </li>
+
+      <li class="inscription" *ngIf="this.tokenEmail == null">
+        <a class="nav-link"  routerLink="create-user">S'inscrire</a>
+      </li>
+
+      <li class="deconnexion" *ngIf="this.tokenEmail != null">
+        <a class="nav-link" routerLink="/" (click)="logout()">Se déconnecter</a>
+      </li>
+    </ul>
+  </div>
+</nav>

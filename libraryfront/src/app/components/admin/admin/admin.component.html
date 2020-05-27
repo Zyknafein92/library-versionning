@@ -1,0 +1,116 @@
+<br>
+<div class="container">
+  <div class="well-block">
+    <div class="well-title">
+
+      <div class="card-body" *ngIf="books">
+        <button type="button" class="btn btn-primary btn-lg btn-block" (click)="addBook()">Ajouter un livre</button>
+        <table class="table table-responsive">
+          <table class="table table-hover table-condensed table-striped">
+            <thead class="book">
+            <tr>
+              <th>ID</th>
+              <th>Titre</th>
+              <th>Auteur</th>
+              <th>Genre</th>
+              <th>Disponibilité</th>
+              <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="clickableRow"  *ngFor="let book of books">
+              <td>{{book.id}}</td>
+              <td>{{book.title}}</td>
+              <td>{{book.author}}</td>
+              <td>{{book.gender}}</td>
+              <td>{{book.avaible ? 'Disponible' : 'Non disponible'}}</td>
+              <div class="btn-group">
+                <td>
+                  <button type="button" class="btn btn-info" (click)="updateBook(this.book.id) ">Modifier</button>
+                </td>
+                <td>
+                  <button type="button" class="btn btn-danger" (click)="deleteBook(this.book.id)">Supprimer</button>
+                </td>
+              </div>
+            </tr>
+            </tbody>
+          </table>
+        </table>
+      </div>
+
+
+      <div class="card-body" *ngIf="books">
+      <button type="button" class="btn btn-primary btn-lg btn-block" (click)="addLibrary()">Ajouter une librairie</button>
+      <table class="table table-responsive">
+        <table class="table table-hover table-condensed table-striped">
+          <thead class="book">
+          <tr>
+            <th>ID</th>
+            <th>Nom</th>
+            <th>Téléphone</th>
+            <th>Adresse</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr class="clickableRow"  *ngFor="let library of librarys">
+            <td>{{library.id}}</td>
+            <td>{{library.name}}</td>
+            <td>{{library.phone}}</td>
+            <td>{{library.address}}</td>
+            <div class="btn-group">
+              <td>
+                <button type="button" class="btn btn-info" (click)="updateLibrary(this.library.id) ">Modifier</button>
+              </td>
+              <td>
+                <button type="button" class="btn btn-danger" (click)="deleteLibrary(this.library.id)">Supprimer</button>
+              </td>
+            </div>
+          </tr>
+          </tbody>
+        </table>
+      </table>
+    </div>
+
+      <div class="card-body" *ngIf="borrows">
+        <button type="button" class="btn btn-primary btn-lg btn-block" (click)="addBorrow()">Créer un emprunt</button>
+        <table class="table table-responsive">
+          <table class="table table-hover table-condensed table-striped">
+            <thead class="book">
+            <tr>
+              <th>ID</th>
+              <th>User ID</th>
+              <th>Book ID</th>
+              <th>Début emprunt</th>
+              <th>Fin emprunt</th>
+              <th>Extension</th>
+              <th>Fin emprunt si extension</th>
+              <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="clickableRow"  *ngFor="let borrow of borrows">
+              <td>{{borrow.id}}</td>
+              <td>{{borrow.userID}}</td>
+              <td>{{borrow.bookID}}</td>
+              <td>{{borrow.dateStart | date:'dd-MM-yyyy'}}</td>
+              <td>{{borrow.dateEnd | date:'dd-MM-yyyy'}}</td>
+              <td>{{borrow.isExtend ? 'Oui' : ' Non '}}</td>
+              <td>{{borrow.dateExtend | date:'dd-MM-yyyy'}}</td>
+              <div class="btn-group">
+                <td>
+                  <button type="button" class="btn btn-info" (click)="updateBorrow(this.borrow.id) ">Modifier</button>
+                </td>
+                <td>
+                  <button type="button" class="btn btn-danger" (click)="deleteBorrow(this.borrow.id)">Supprimer</button>
+                </td>
+              </div>
+            </tr>
+            </tbody>
+          </table>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>

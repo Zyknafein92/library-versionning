@@ -1,0 +1,36 @@
+<div class="container">
+  <div class="well center">
+    <br>
+    <br>
+    <div class="container-fluid align-content-center">
+    <h4 class="card-title"><span class="title1">En pratique :</span></h4>
+    <br>
+    <p> Vous pouvez retrouver içi les différentes adresses de nos sites, ainsi que les numéro de téléphone et d'ouvertures :</p>
+    <p> Lorsque les bibliothèques sont closes, vous pouvez déposer les ouvrages que vous devez remettre dans les boites aux lettres prévues à cet effet.</p><br>
+
+      <div class="card mb-3" style="border-width: 0; border-color: darkgrey" *ngFor="let library of librarys">
+        <br>
+        <div class="row-cols-12 text-center">
+          <div class="card-body">
+            <h4 class="card-title">{{library.name}}</h4>
+            <h5 class="card-title">Adresse</h5>
+            <p class="card-text">{{library.address}}</p>
+            <h5 class="card-title">Téléphone</h5>
+            <p class="card-text">{{library.phone}}</p>
+            <h5 class="card-title">Horaire</h5>
+            <p class="card-text">
+              <strong>Lundi:</strong> 8h-19h,
+              <strong> Mardi:</strong> 8h-19h,
+              <strong>Mercredi:</strong> 8h-19h,
+              <strong> Jeudi:</strong> 8h-19h,
+              <strong>Vendredi:</strong> 8h-19h,
+              <strong>Samedi:</strong> 10h-18h,
+              <strong> Dimanche:</strong> Fermeture
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
