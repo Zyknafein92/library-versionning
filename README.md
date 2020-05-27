@@ -1,4 +1,4 @@
-Projet n°7 pour OpenClassrooms
+Projet n°10 pour OpenClassrooms
 
 - Licence : License libre
 - Auteur : Jérôme Deneux
