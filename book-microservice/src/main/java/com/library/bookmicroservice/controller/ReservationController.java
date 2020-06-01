@@ -27,7 +27,7 @@ public class ReservationController {
 
     @GetMapping(value= "api/reservations/{id}")
     public ResponseEntity<List<Reservation>> getReservations(@PathVariable("id") Long id){
-        List<Reservation> reservations = reservationService.getReservations(id);
+        List<Reservation> reservations = reservationService.getReservationsByBookID(id);
         if(reservations == null) return ResponseEntity.noContent().build();
         return new ResponseEntity<>(reservations, HttpStatus.OK);
     }

@@ -35,6 +35,7 @@
                 <th>Ouvrage</th>
                 <th>Disponibilité</th>
                 <th>Site</th>
+                <th>Réservation</th>
               </tr>
               </thead>
               <tbody>
@@ -42,6 +43,7 @@
                 <td>{{bookS.title}}</td>
                 <td>{{bookS.avaible ? 'Disponible' : 'Non disponible'}}</td>
                 <td>{{bookS.libraryName}}</td>
+                <td *ngIf="book.avaible == false"><button type="button" class="btn-danger">Réserver</button></td>
               </tr>
               </tbody>
             </table>
