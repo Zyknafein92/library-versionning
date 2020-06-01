@@ -36,7 +36,6 @@ export class ViewBookComponent implements OnInit {
       });
   }
 
-
   private initListBook() {
     this.bookService.getBooks().subscribe(
       data => {
