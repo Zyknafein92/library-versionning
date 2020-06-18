@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="bookDB" uuid="555f9ba1-22fe-46b6-bed3-91c04efaa9ce">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://localhost:5432/bibliotheque-book</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="borrowDB" uuid="46dd5fa1-3778-4ef8-a064-afdfde937566">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://localhost:5432/bibliotheque-borrow</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="userDB" uuid="075bcebb-d743-481b-a85b-a0e492752640">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://localhost:5432/bibliotheque-user</jdbc-url>
+    </data-source>
+  </component>
+</project>

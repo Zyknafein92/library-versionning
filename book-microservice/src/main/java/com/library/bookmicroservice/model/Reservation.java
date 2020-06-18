@@ -1,5 +1,6 @@
 package com.library.bookmicroservice.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,12 +20,14 @@ public class Reservation {
     Long id;
 
     @Column(name = "date")
+    @JsonFormat(pattern="yyyy-MM-dd", shape = JsonFormat.Shape.STRING, timezone = "CET", locale = "fr-FR")
     Date date;
 
-    @Column(name = "user_id")
-    String userID;
+    @Column(name = "user_email")
+    String userEmail;
 
-    @Column(name = "book_id")
     String bookID;
+
+    String bookTitle;
 
 }

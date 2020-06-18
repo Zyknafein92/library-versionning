@@ -3,7 +3,7 @@ import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Reservation} from "../models/reservation";
 import {Book} from "../models/book";
-import {FormGroup} from "@angular/forms";
+
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +21,10 @@ export class ReservationService {
     });
   }
 
+  getReservations() : Observable<Array<Reservation>> {
+    return this.http.get<Array<Reservation>>(this.reservationURL + 's');
+  }
+
   getReservationsByBookID(id: any) : Observable<Array<Reservation>> {
     return this.http.get<Array<Book>>(this.reservationURL + '/reservations', {
       params: new HttpParams()
@@ -28,9 +32,9 @@ export class ReservationService {
     })
   }
 
-  createReservation(reservation: Reservation): Observable<FormGroup> {
+  createReservation(reservation: Reservation): Observable<Reservation> {
     console.log("reservation value: " , reservation);
-    return this.http.post<FormGroup>(this.reservationURL + '/addReservation', reservation);
+    return this.http.post<Reservation>(this.reservationURL + '/addReservation', reservation);
   }
 
   updateReservation(reservation: Reservation): Observable<Reservation> {
@@ -39,7 +43,7 @@ export class ReservationService {
 
   deleteReservation(id : any): Observable<{}> {
     console.log('delete id: ', id);
-    return this.http.delete<Book>( this.reservationURL + '/deleteReservation', {
+    return this.http.delete<Reservation>( this.reservationURL + '/deleteReservation', {
       params: new HttpParams()
           .set('id', id)
     });

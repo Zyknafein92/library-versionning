@@ -25,8 +25,15 @@ public class ReservationController {
         return new ResponseEntity<>(reservation,HttpStatus.OK);
     }
 
+    @GetMapping(value= "/api/reservations")
+    public ResponseEntity<List<Reservation>> getReservations() {
+        List<Reservation> reservations = reservationService.getReservations();
+        if(reservations == null) return ResponseEntity.noContent().build();
+        return new ResponseEntity<>(reservations, HttpStatus.OK);
+    }
+
     @GetMapping(value= "api/reservations/{id}")
-    public ResponseEntity<List<Reservation>> getReservationsByBookID(@PathVariable("id") Long id){
+    public ResponseEntity<List<Reservation>> getReservationsByBookID(@PathVariable("id") String id){
         List<Reservation> reservations = reservationService.getReservationsByBookID(id);
         if(reservations == null) return ResponseEntity.noContent().build();
         return new ResponseEntity<>(reservations, HttpStatus.OK);
@@ -45,8 +52,9 @@ public class ReservationController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/api/reservation/deleteReservation")
-    public ResponseEntity<Void> deleteReservation(@PathVariable("id") Long id) {
+
+    @RequestMapping(value = "/api/reservation/deleteReservation", method = RequestMethod.DELETE)
+    public ResponseEntity<Void> deleteReservation(@RequestParam(name = "id", defaultValue = "") Long id){
         Reservation reservation = reservationService.getReservation(id);
         if (reservation == null) {
             return ResponseEntity.noContent().build();
