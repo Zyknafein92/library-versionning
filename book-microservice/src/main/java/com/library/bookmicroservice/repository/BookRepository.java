@@ -19,4 +19,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Query(value = "select distinct on (b.title) b.* from Book b " ,nativeQuery = true)
     List<Book> findDistinctByTitle();
+
+    List<Book> findByTitle(String bookTitle);
 }

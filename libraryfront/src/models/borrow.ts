@@ -1,4 +1,4 @@
-export interface Borrow {
+export class Borrow {
  id?: number;
  userID?: string;
  bookID?: string;

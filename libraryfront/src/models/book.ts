@@ -1,4 +1,6 @@
-export interface Book {
+import {Reservation} from "./reservation";
+
+export class Book {
   id?: number;
   title?: string;
   editor?: string;

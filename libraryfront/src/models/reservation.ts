@@ -1,6 +1,9 @@
-export interface Reservation {
+import {Book} from "./book";
+
+export class Reservation {
     id?:number;
     date?:Date;
-    userID?:string;
+    userEmail?:string;
     bookID?:string;
+    bookTitle?:string;
 }

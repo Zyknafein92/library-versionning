@@ -39,11 +39,13 @@
               </tr>
               </thead>
               <tbody>
-              <tr class="clickableRow"  *ngFor="let bookS of books">
-                <td>{{bookS.title}}</td>
-                <td>{{bookS.avaible ? 'Disponible' : 'Non disponible'}}</td>
-                <td>{{bookS.libraryName}}</td>
-                <td *ngIf="book.avaible == false"><button type="button" class="btn-danger">Réserver</button></td>
+              <tr class="clickableRow"  *ngFor="let book of books">
+                <td>{{book.title}}</td>
+                <td>{{book.avaible ? 'Disponible' : 'Non disponible'}}</td>
+                <td>{{book.libraryName}}</td>
+                <td *ngIf="checkBookDisponibility(book) == false && checkMyReservation(book) == false || checkAvaibleReservation(book) == false && checkMyReservation(book) == false">Réservation impossible</td>
+                <td *ngIf="checkBookDisponibility(book) == true && checkAvaibleReservation(book) == true"><button type="button" class="btn-danger"(click)="createReservation(this.book)">Réserver</button></td>
+                <td *ngIf="checkMyReservation(book) == true"><button type="button" class="btn-danger" (click)="deleteReservation(this.book)">Annuler la réservation</button></td>
               </tr>
               </tbody>
             </table>
@@ -51,9 +53,6 @@
 
       </div>
       <br>
-
-
-
 
       <div class *ngIf="book == null">
         <p>Oups... Ya un soucis !</p>
