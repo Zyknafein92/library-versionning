@@ -46,10 +46,10 @@ export class BookService {
     return this.http.put<Book>(this.bookURL + '/updateBook', form.value);
   }
 
-  updateBookStatus(book: Book): Observable<Book> {
-    console.log("book to update status", book);
-    return this.http.put<Book>(this.bookURL + '/updateBookStatus', book);
-  }
+  // updateBookStatus(book: Book): Observable<Book> {
+  //   console.log("book to update status", book);
+  //   return this.http.put<Book>(this.bookURL + '/updateBookStatus', book);
+  // }
 
   deleteBook(idBook: any): Observable<{}> {
     console.log('delete id: ', idBook);

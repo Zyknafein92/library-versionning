@@ -82,7 +82,6 @@ export class BorrowEditComponent implements OnInit {
     if (!this.borrow || this.borrow.id == null) {
       this.borrowService.saveBorrow(this.forms).subscribe(
         () => {
-          this.updateAvaibleStatus();
           this.bookService.getBooks().subscribe( res => {
             this.router.navigate(['admin']);
           });
@@ -125,17 +124,6 @@ export class BorrowEditComponent implements OnInit {
 
   updateDateExtend() {
     this.borrow.dateExtend = new Date(this.forms.value.dateExtend);
-  }
-
-
-  updateAvaibleStatus() {
-    this.bookService.getBook(this.forms.value.bookID).subscribe(
-      data => {
-        this.book = data;
-        this.bookService.updateBookStatus(this.book).subscribe( res => {
-          this.bookService.getBooks().subscribe();
-        });
-      });
   }
 }
 

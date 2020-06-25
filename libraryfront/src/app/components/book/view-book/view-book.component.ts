@@ -84,22 +84,27 @@ export class ViewBookComponent implements OnInit {
     /*  Reservation  */
 
     createReservation(book: Book) {
+        this.book = book;
         this.reservation = new Reservation();
-        this.reservation.date = new Date();
+        this.reservation.date = null;
         this.reservation.bookID = this.book.id.toString();
         this.reservation.userEmail = this.tokenStorageService.getEmail();
         this.reservation.bookTitle = this.book.title;
 
-        console.log("reservation : ", this.reservation);
         this.reservationService.createReservation(this.reservation).subscribe(
             response => {
-                console.log('response: ', response);
+                console.log('reservation to create: ', response);
                 this.initReservations();
+                this.bookService.getBook(book.id).subscribe(data => {
+                    this.book = data;
+                    this.initListBook();
+                });
             },
             err => {
                 console.log('Error: ', err.error.message);
                 this.messageError = err.error.message;
             });
+
     }
 
     deleteReservation(book: Book) {
@@ -107,13 +112,30 @@ export class ViewBookComponent implements OnInit {
 
         this.reservationService.deleteReservation(toDelete.id).subscribe(
             response => {
-                console.log('response: ', response);
+                console.log('reservation to delete: ', response);
+                this.reservationService.updateBookReservation(book).subscribe(
+                    response => {
+                        console.log('book to update: ', response);
+                        this.initReservations();
+                    },
+                    err => {
+                        console.log('Error: ', err.error.message);
+                        this.messageError = err.error.message;
+                    });
                 this.initReservations();
+
+                this.bookService.getBook(book.id).subscribe(data => {
+                    this.book = data;
+                    this.initListBook();
+                });
             },
             err => {
                 console.log('Error: ', err.error.message);
                 this.messageError = err.error.message;
             });
+
+
+
     }
 
     checkBookDisponibility(book: Book) {

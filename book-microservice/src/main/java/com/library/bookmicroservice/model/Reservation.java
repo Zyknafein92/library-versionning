@@ -26,8 +26,10 @@ public class Reservation {
     @Column(name = "user_email")
     String userEmail;
 
+    @Column(name = "book_id")
     String bookID;
 
+    @Column(name = "book_title")
     String bookTitle;
 
 }
