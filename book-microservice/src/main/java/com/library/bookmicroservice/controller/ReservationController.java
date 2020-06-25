@@ -2,6 +2,7 @@ package com.library.bookmicroservice.controller;
 
 import com.library.bookmicroservice.model.Book;
 import com.library.bookmicroservice.model.Reservation;
+import com.library.bookmicroservice.services.book.BookDTO;
 import com.library.bookmicroservice.services.reservation.ReservationDTO;
 import com.library.bookmicroservice.services.reservation.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,12 @@ public class ReservationController {
         Reservation cReservation = reservationService.createReservation(reservationDTO);
         if (cReservation == null) return ResponseEntity.noContent().build();
         return new ResponseEntity<>(cReservation, HttpStatus.CREATED);
+    }
+
+    @PutMapping(value = "api/reservation/checkReservation")
+    public ResponseEntity<Reservation> checkForBookReservation(@RequestBody BookDTO bookDTO) {
+        reservationService.updateBookReservation(String.valueOf(bookDTO.getId()));
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping(value= "api/reservation/updateReservation")

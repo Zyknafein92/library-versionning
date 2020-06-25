@@ -48,18 +48,6 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void updateBookStatus(BookDTO bookDTO) {
-        Book book = getBook(bookDTO.getId());
-
-        if (book.getAvaible()) {
-            book.setAvaible(false);
-        } else {
-            book.setAvaible(true);
-        }
-        bookRepository.save(book);
-    }
-
-    @Override
     public void updateBook(BookDTO bookDTO) {
         Book book = getBook(bookDTO.getId());
         if (book == null) throw new BookNotFoundException("Le livre recherché n'a pas été trouvé");

@@ -8,14 +8,7 @@ import com.library.bookmicroservice.services.reservation.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 @Component
@@ -25,43 +18,30 @@ public class BatchReservation {
     ReservationRepository reservationRepository;
     @Autowired
     ReservationService reservationService;
+    @Autowired
+    EmailService emailService;
 
-    List<Reservation> reservationList = new ArrayList<>();
+    List<Reservation> reservationsOutDated = new ArrayList<>();
 
 
     //@Scheduled(cron= "0 0 0 * * *") //tous les jours à minuit.
     @Scheduled(fixedDelay = 120000) // toutes les 2 minutes pour démo.
-    public void checkReservationDate() {
+    public void runCheckReservationOutDatedDate() {
 
-//        reservationList = initReservationList();
-//        for (Reservation reservation : reservationList) {
-//            Calendar rDate = Calendar.getInstance();
-//            Calendar today = Calendar.getInstance();
-//
-//            rDate.setTime(reservation.getDate());
-//            rDate.add(Calendar.DATE, 2);
-//
-//            if (rDate.after()) {
-////                reservationService.deleteReservation(reservation.getId());
-////            }
-//
-//        }
-//
-}
+        // Clean des 48h
+        reservationsOutDated = reservationRepository.findOutDatedReservation();
 
-    //
-//    private Email createEmailInformations (Book book, Reservation reservation) {
-//
-//        Email emailToSend = new Email();
-//
-//        emailToSend.setEmailUser(reservation.getUserEmail());
-//        emailToSend.setBookTitle(book.getTitle());
-//
-//        return emailToSend;
-//    }
-//
-    private List<Reservation> initReservationList() {
-        return reservationList = reservationRepository.findAll();
+        if(reservationsOutDated.size() > 0) {
+            for (Reservation reservation: reservationsOutDated) {
+                String bookID = reservation.getBookID();
+                Email email = emailService.createEmailInformations(reservation);
+                emailService.sendEmailCancelReservation(email);
+                reservationRepository.deleteById(reservation.getId());
+
+                //Attribution des nouvelles réservations
+                reservationService.updateBookReservation(bookID);
+            }
+        }
     }
 
 }

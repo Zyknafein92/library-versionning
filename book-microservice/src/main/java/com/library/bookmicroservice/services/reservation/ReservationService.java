@@ -18,4 +18,6 @@ public interface ReservationService {
 
     void deleteReservation(Long id);
 
+    void updateBookReservation(String bookID);
+
 }

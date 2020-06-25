@@ -58,11 +58,11 @@ public class BookController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @RequestMapping(value= "/api/book/updateBookStatus", method = RequestMethod.PUT)
-    public ResponseEntity<Void> updateBookStatus(@RequestBody BookDTO bookDTO) {
-        bookService.updateBookStatus(bookDTO);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+//    @RequestMapping(value= "/api/book/updateBookStatus", method = RequestMethod.PUT)
+//    public ResponseEntity<Void> updateBookStatus(@RequestBody BookDTO bookDTO) {
+//        bookService.updateBookStatus(bookDTO);
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
 
     @RequestMapping(value = "/api/book/deleteBook", method = RequestMethod.DELETE)
     public ResponseEntity<Void> deleteBook(@RequestParam(name = "id", defaultValue = "") String id) {

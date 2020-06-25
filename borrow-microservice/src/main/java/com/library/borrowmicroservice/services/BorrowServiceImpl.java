@@ -1,5 +1,6 @@
 package com.library.borrowmicroservice.services;
 
+import com.library.borrowmicroservice.batch.DatabaseConnect;
 import com.library.borrowmicroservice.exceptions.BorrowNotFoundException;
 import com.library.borrowmicroservice.model.Borrow;
 import com.library.borrowmicroservice.repository.BorrowRepository;
@@ -16,6 +17,8 @@ public class BorrowServiceImpl implements BorrowService {
     BorrowRepository borrowRepository;
     @Autowired
     BorrowMapper borrowMapper;
+
+
 
 
     @Override
@@ -44,6 +47,7 @@ public class BorrowServiceImpl implements BorrowService {
         borrowDTO.setDateExtend(LocalDateTime.now().plusDays(56));
         borrowDTO.setIsExtend(false);
         Borrow borrow = borrowMapper.borrowDtoToBorrow(borrowDTO);
+        DatabaseConnect.updateBookStatusNotAvaible(borrowDTO.getBookID());
         return borrowRepository.save(borrow);
     }
 

@@ -41,6 +41,11 @@ export class ReservationService {
     return this.http.put<Reservation>(this.reservationURL + '/updateReservation', reservation);
   }
 
+  updateBookReservation(book : Book): Observable<Reservation> {
+    return this.http.put<Reservation>(this.reservationURL + '/checkReservation',  book);
+  }
+
+
   deleteReservation(id : any): Observable<{}> {
     console.log('delete id: ', id);
     return this.http.delete<Reservation>( this.reservationURL + '/deleteReservation', {

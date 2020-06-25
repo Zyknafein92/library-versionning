@@ -8,6 +8,7 @@ import {Library} from '../../../../models/library';
 import {Borrow} from '../../../../models/borrow';
 import {Book} from '../../../../models/book';
 import {User} from '../../../../models/user';
+import {ReservationService} from "../../../../services/reservation.service";
 
 @Component({
   selector: 'app-admin',
@@ -21,7 +22,7 @@ export class AdminComponent implements OnInit {
   books: Array<Book>;
   borrows: Array<Borrow>;
 
-  constructor(private libraryService: LibraryService, private bookService: BookService, private userService: UserService, private borrowService: BorrowService, private router: Router) {
+  constructor(private libraryService: LibraryService, private bookService: BookService, private userService: UserService, private borrowService: BorrowService, private reservationService: ReservationService,  private router: Router) {
   }
 
   ngOnInit() {
@@ -97,9 +98,11 @@ export class AdminComponent implements OnInit {
     let borrow = this.borrows.find(value => value.id == id);
     let book = this.books.find(value => ""+value.id == borrow.bookID);
     console.log("book to find: ", book);
-    this.bookService.updateBookStatus(book).subscribe(next => {
-      this.initBooks();
-    });
+    this.reservationService.updateBookReservation(book).subscribe(
+        next => {
+          this.initBooks();
+          console.log("book:", book);
+        });
 
     this.borrowService.deleteBorrow(id).subscribe(
       next => {

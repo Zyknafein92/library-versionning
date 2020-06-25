@@ -43,6 +43,23 @@ public class DatabaseConnect {
         return book;
     }
 
+    public static void updateBookStatusNotAvaible(String bookID) {
+
+        try (Connection connection = DriverManager.getConnection(DB_BOOK_URL, USER, PASS)) {
+            Class.forName(JDBC_DRIVER);
+            Statement statement = connection.createStatement();
+            statement.executeUpdate("UPDATE book set avaible = false where book_id in (" + bookID +")" );
+        }
+        catch (SQLException e) {
+            System.out.println("Connection failure.");
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            System.out.println("Fail to load driver");
+            e.printStackTrace();
+        }
+
+    }
+
 
     public static User getUserFromDB(String userID) {
 
