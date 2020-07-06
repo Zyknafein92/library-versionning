@@ -12,6 +12,8 @@ public interface ReservationService {
 
     List<Reservation> getReservationsByBookID(String id);
 
+    List<Reservation> getReservationByUserEmail(String email);
+
     Reservation createReservation(ReservationDTO reservationDTO);
 
     void updateReservation(ReservationDTO reservationDTO);

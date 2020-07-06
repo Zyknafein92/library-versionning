@@ -26,10 +26,14 @@ export class ReservationService {
   }
 
   getReservationsByBookID(id: any) : Observable<Array<Reservation>> {
-    return this.http.get<Array<Book>>(this.reservationURL + '/reservations', {
+    return this.http.get<Array<Reservation>>(this.reservationURL + '/reservations', {
       params: new HttpParams()
           .set('id', id)
     })
+  }
+
+  getReservationsByUserEmail(email: string) : Observable<Array<Reservation>> {
+    return this.http.get<Array<Reservation>>(this.reservationURL + 's/email/' + email);
   }
 
   createReservation(reservation: Reservation): Observable<Reservation> {

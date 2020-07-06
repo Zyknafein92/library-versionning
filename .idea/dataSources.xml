@@ -19,5 +19,11 @@
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
       <jdbc-url>jdbc:postgresql://localhost:5432/bibliotheque-user</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="SecurityDB" uuid="d3613ccb-ec1f-4ad4-88c4-9f6192d6dcf6">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://localhost:5432/bibliotheque-security</jdbc-url>
+    </data-source>
   </component>
 </project>

@@ -3,6 +3,7 @@
     <div class="col-lg-12">
       <div class="well-block">
         <div class="well-title">
+
           <br>
           <div class="card" *ngIf="user">
             <div class="card-header" style="text-align: center">
@@ -122,10 +123,42 @@
                     </tbody>
                   </table>
                 </table>
-
               </div>
+            </div>
+          </div>
 
+          <br>
 
+              <div class="card" *ngIf="user">
+                <div class="card-header" style="text-align: center">
+                  <h3>Mes réservations :</h3>
+                </div>
+
+                <div class="card-body">
+                  <div class="card-deck">
+                    <table class="table table-responsive">
+                      <table class="table table-hover table-condensed table-striped">
+                        <thead class="reservation">
+                        <tr>
+                          <th>Titre du livre</th>
+                          <th>Date de retour envisagée</th>
+                          <th>Position dans la liste</th>
+                          <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="clickableRow"  *ngFor="let reservation of reservations">
+                          <td>{{reservation.bookTitle}}</td>
+                          <td *ngIf="reservation.reservationPosition == 1">{{reservation.bookReturn == null ? 'En attente de votre emprunt' : 'Retour envisagé le :' + reservation.bookReturn}}</td>
+                          <td *ngIf="reservation.reservationPosition == 2">{{reservation.bookReturn == null ? 'Reservé, en attente de retrait par un autre utilisateur.' : 'Retour envisagé le :' + reservation.bookReturn}}</td>
+                          <td><button type="button" class="btn-danger" (click)="deleteReservation(this.reservation)">Annuler la réservation</button></td>
+                        </tr>
+                        </tbody>
+                      </table>
+                    </table>
+                  </div>
+                </div>
+              </div>
 
 
             </div>
@@ -146,8 +179,6 @@
         </div>
       </div>
     </div>
-  </div>
-</div>
 
 
 

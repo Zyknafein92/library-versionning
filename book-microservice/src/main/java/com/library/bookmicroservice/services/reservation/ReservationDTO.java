@@ -13,7 +13,9 @@ import java.util.Date;
 public class ReservationDTO {
     Long id;
     Date date;
+    Integer reservationPosition;
     String userEmail;
     String bookID;
     String bookTitle;
+    Date bookReturn;
 }

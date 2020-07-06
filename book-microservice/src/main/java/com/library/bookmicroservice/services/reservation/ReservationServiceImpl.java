@@ -44,9 +44,14 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
+    public List<Reservation> getReservationByUserEmail(String email) {
+        return reservationRepository.findAllByUserEmailIs(email);
+    }
+
+    @Override
     public Reservation createReservation(ReservationDTO reservationDTO) {
         Reservation reservation = reservationMapper.reservatioDtoToReservation(reservationDTO);
-        List<Reservation> reservationList = reservationRepository.findByBookID(reservationDTO.bookID);
+        List<Reservation> reservationList = reservationRepository.findAllByBookID(reservationDTO.bookID);
         Book book = bookRepository.getOne(Long.valueOf(reservationDTO.bookID));
 
         if (!checkReservationCountByBook(reservationDTO))
@@ -58,9 +63,13 @@ public class ReservationServiceImpl implements ReservationService {
         else {
             book.setAvaible(false);
             bookRepository.save(book);
+            reservation.setBookReturn(updateAvaibleDateWithDTO(reservationDTO));
+            reservation.setReservationPosition(2);
+
             if(reservationList.isEmpty()) {
                 Date today = new Date();
                 reservation.setDate(today);
+                reservation.setReservationPosition(1);
                 Email email = emailService.createEmailInformations(reservation);
                 emailService.sendEmailReservation(email);
             }
@@ -77,7 +86,6 @@ public class ReservationServiceImpl implements ReservationService {
         } else {
             reservationMapper.updateReservationFromReservationDTO(reservationDTO, reservation);
             reservationRepository.save(reservation);
-
         }
     }
 
@@ -95,6 +103,8 @@ public class ReservationServiceImpl implements ReservationService {
             Reservation reservation = reservationList.get(0);
             Date today = new Date();
             reservation.setDate(today);
+            reservation.setBookReturn(updateAvaibleDate(reservation));
+            reservation.setReservationPosition(1);
             reservationRepository.save(reservation);
 
             Email email = emailService.createEmailInformations(reservation);
@@ -102,19 +112,19 @@ public class ReservationServiceImpl implements ReservationService {
 
         } else {
             book.setAvaible(true);
-           bookRepository.save(book);
+            bookRepository.save(book);
         }
 
     }
 
     private boolean checkReservationCountByBook(ReservationDTO reservationDTO) {
-        List<Reservation> reservations = this.reservationRepository.findByBookID(reservationDTO.bookID);
+        List<Reservation> reservations = this.reservationRepository.findAllByBookID(reservationDTO.bookID);
         return reservations.size() <= 1;
     }
 
     private boolean checkUserDoubleReservation(ReservationDTO reservationDTO) {
         boolean check = false;
-        List<Reservation> reservations = this.reservationRepository.findByBookID(reservationDTO.bookID);
+        List<Reservation> reservations = this.reservationRepository.findAllByBookID(reservationDTO.bookID);
         for (Reservation reservation : reservations) {
             check = reservation.getUserEmail().equals(reservationDTO.userEmail) && reservation.getBookTitle().equals(reservationDTO.bookTitle);
         }
@@ -128,6 +138,18 @@ public class ReservationServiceImpl implements ReservationService {
             return user.getEmail().equals(reservationDTO.userEmail);
         }
         return false;
+    }
+
+    private Date updateAvaibleDateWithDTO(ReservationDTO reservationDTO) {
+        Borrow borrow = BorrowDatabaseConnect.getBorrowFromDB(reservationDTO.getBookID());
+        if(borrow.getIsExtend() != null) return borrow.getIsExtend() ? borrow.getDateExtend() : borrow.getDateEnd();
+        else return null;
+    }
+
+    private Date updateAvaibleDate(Reservation reservation) {
+        Borrow borrow = BorrowDatabaseConnect.getBorrowFromDB(reservation.getBookID());
+        if(borrow.getIsExtend() != null) return borrow.getIsExtend() ? borrow.getDateExtend() : borrow.getDateEnd();
+        else return null;
     }
 
 }

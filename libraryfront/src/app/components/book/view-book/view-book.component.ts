@@ -108,7 +108,7 @@ export class ViewBookComponent implements OnInit {
     }
 
     deleteReservation(book: Book) {
-        let toDelete = this.reservations.find(reservation => reservation.bookID == (''+book.id));
+        let toDelete = this.reservations.find(reservation => reservation.userEmail === this.tokenStorageService.getEmail() && reservation.bookTitle == book.title && reservation.bookID == (''+ book.id));
 
         this.reservationService.deleteReservation(toDelete.id).subscribe(
             response => {
@@ -143,13 +143,13 @@ export class ViewBookComponent implements OnInit {
     }
 
     checkAvaibleReservation(book: Book) {
-        let check = this.reservations.find(reservation => reservation.userEmail == this.tokenStorageService.getEmail() && reservation.bookTitle == book.title);
+        let check = this.reservations.find(reservation => reservation.userEmail === this.tokenStorageService.getEmail() && reservation.bookTitle == book.title);
         if (check != null) return false;
         else return true;
     }
 
     checkMyReservation(book: Book) {
-        let check = this.reservations.find(reservation => reservation.userEmail == this.tokenStorageService.getEmail() && reservation.bookTitle == book.title && reservation.bookID == (''+ book.id));
+        let check = this.reservations.find(reservation => reservation.userEmail === this.tokenStorageService.getEmail() && reservation.bookTitle == book.title && reservation.bookID == (''+ book.id));
         console.log("CMR", check);
         if (check != null) return true;
         else return false;
