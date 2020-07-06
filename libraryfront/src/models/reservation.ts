@@ -6,4 +6,6 @@ export class Reservation {
     userEmail?:string;
     bookID?:string;
     bookTitle?:string;
+    reservationPosition?:number;
+    bookReturn?:Date;
 }

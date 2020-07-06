@@ -26,6 +26,14 @@ public class ReservationController {
         return new ResponseEntity<>(reservation,HttpStatus.OK);
     }
 
+    @GetMapping(value = "/api/reservations/email/{email}")
+    public ResponseEntity<List<Reservation>> getAllBooksByUserEmail(@PathVariable("email") String email) {
+        List<Reservation> reservations = reservationService.getReservationByUserEmail(email);
+        if (reservations == null) return ResponseEntity.noContent().build();
+        return new ResponseEntity<>(reservations, HttpStatus.OK);
+    }
+
+
     @GetMapping(value= "/api/reservations")
     public ResponseEntity<List<Reservation>> getReservations() {
         List<Reservation> reservations = reservationService.getReservations();
