@@ -61,18 +61,27 @@ public class ReservationServiceImpl implements ReservationService {
         if (checkUserApplyForBorrowBook(reservationDTO))
             throw new ReservationLimitException("Vous ne pouvez pas réserver un livre que vous êtes actuellement entrain d'emprunter");
         else {
-            book.setAvaible(false);
-            bookRepository.save(book);
-            reservation.setBookReturn(updateAvaibleDateWithDTO(reservationDTO));
-            reservation.setReservationPosition(2);
 
-            if(reservationList.isEmpty()) {
+            if(reservationList.isEmpty() && book.getAvaible()) {
                 Date today = new Date();
                 reservation.setDate(today);
                 reservation.setReservationPosition(1);
                 Email email = emailService.createEmailInformations(reservation);
                 emailService.sendEmailReservation(email);
             }
+
+            if(reservationList.isEmpty() && !book.getAvaible()) {
+                reservation.setReservationPosition(1);
+                reservation.setBookReturn(updateAvaibleDateWithDTO(reservationDTO));
+            }
+
+            if(!reservationList.isEmpty()) {
+                reservation.setReservationPosition(2);
+                reservation.setBookReturn(updateAvaibleDateWithDTO(reservationDTO));
+            }
+
+            book.setAvaible(false);
+            bookRepository.save(book);
         }
 
         return reservationRepository.save(reservation);
@@ -94,23 +103,24 @@ public class ReservationServiceImpl implements ReservationService {
 
     public void updateBookReservation(String bookID) {
         Book book = bookRepository.getOne(Long.valueOf(bookID));
+        Borrow borrow = BorrowDatabaseConnect.getBorrowFromDBByBookID(bookID);
         List<Reservation> reservationList = reservationRepository.findAllByBookID(bookID);
+        Date today = new Date();
 
         if(!reservationList.isEmpty()) {
             book.setAvaible(false);
             bookRepository.save(book);
-
             Reservation reservation = reservationList.get(0);
-            Date today = new Date();
-            reservation.setDate(today);
             reservation.setBookReturn(updateAvaibleDate(reservation));
             reservation.setReservationPosition(1);
+
+            if(borrow.getId() == null) {
+                reservation.setDate(today);
+                Email email = emailService.createEmailInformations(reservation);
+                emailService.sendEmailReservation(email);
+            }
             reservationRepository.save(reservation);
-
-            Email email = emailService.createEmailInformations(reservation);
-            emailService.sendEmailReservation(email);
-
-        } else {
+        } else if(borrow.getId() == null){
             book.setAvaible(true);
             bookRepository.save(book);
         }
@@ -132,22 +142,37 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     private boolean checkUserApplyForBorrowBook(ReservationDTO reservationDTO) {
-        Borrow borrow = BorrowDatabaseConnect.getBorrowFromDB(reservationDTO.getBookID());
-        if (borrow.getBookID() != null) {
-            User user = UserDabataseConnect.getUserFromDB(borrow.getUserID());
-            return user.getEmail().equals(reservationDTO.userEmail);
+
+//        Borrow borrow = BorrowDatabaseConnect.getBorrowFromDBByBookID(reservationDTO.getBookID());
+//        if (borrow.getBookID() != null) {
+//            User user = UserDabataseConnect.getUserFromDB(borrow.getUserID());
+//            return user.getEmail().equals(reservationDTO.userEmail);
+//        }
+
+        boolean check = false;
+        User user = UserDabataseConnect.getUserFromDBByEmail(reservationDTO.userEmail);
+        List<Book> books = bookRepository.findByTitle(reservationDTO.bookTitle);
+
+        for (Book book : books) {
+            Borrow borrow = BorrowDatabaseConnect.getBorrowFromDBByBookID(String.valueOf(book.getId()));
+
+            if(borrow.getBookID() != null) {
+                check = borrow.getUserID().equals(String.valueOf(user.getId()));
+                return check;
+            }
         }
+
         return false;
     }
 
     private Date updateAvaibleDateWithDTO(ReservationDTO reservationDTO) {
-        Borrow borrow = BorrowDatabaseConnect.getBorrowFromDB(reservationDTO.getBookID());
+        Borrow borrow = BorrowDatabaseConnect.getBorrowFromDBByBookID(reservationDTO.getBookID());
         if(borrow.getIsExtend() != null) return borrow.getIsExtend() ? borrow.getDateExtend() : borrow.getDateEnd();
         else return null;
     }
 
     private Date updateAvaibleDate(Reservation reservation) {
-        Borrow borrow = BorrowDatabaseConnect.getBorrowFromDB(reservation.getBookID());
+        Borrow borrow = BorrowDatabaseConnect.getBorrowFromDBByBookID(reservation.getBookID());
         if(borrow.getIsExtend() != null) return borrow.getIsExtend() ? borrow.getDateExtend() : borrow.getDateEnd();
         else return null;
     }
