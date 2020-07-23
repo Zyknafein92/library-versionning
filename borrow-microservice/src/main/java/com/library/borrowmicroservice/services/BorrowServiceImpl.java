@@ -2,12 +2,14 @@ package com.library.borrowmicroservice.services;
 
 import com.library.borrowmicroservice.batch.DatabaseConnect;
 import com.library.borrowmicroservice.exceptions.BorrowNotFoundException;
+import com.library.borrowmicroservice.exceptions.BorrowRulesException;
 import com.library.borrowmicroservice.model.Borrow;
 import com.library.borrowmicroservice.repository.BorrowRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -62,8 +64,18 @@ public class BorrowServiceImpl implements BorrowService {
     @Override
     public void updateBorrowExtendStatus(Long id) {
         Borrow borrow = getBorrow(id);
-        borrow.setIsExtend(true);
-        borrowRepository.save(borrow);
+        Date today = new Date();
+
+        borrow.setIsExtend(today.before(borrow.getDateEnd()));
+
+        if(borrow.getIsExtend()) {
+            borrowRepository.save(borrow);
+        } else {
+            throw new BorrowRulesException (
+                    "Vous ne pouvez plus prolonger votre emprunt après la date butoir. " +
+                            "Merci de restituer l'ouvrage le plus rapidement possible.");
+        }
+
     }
 
     @Override
