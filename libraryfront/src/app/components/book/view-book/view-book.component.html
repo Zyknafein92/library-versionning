@@ -32,7 +32,6 @@
             <table class="table table-hover table-condensed table-striped text-center">
               <thead class="book">
               <tr>
-                <th>ID</th>
                 <th>Ouvrage</th>
                 <th>Disponibilité</th>
                 <th>Site</th>
@@ -41,7 +40,6 @@
               </thead>
               <tbody>
               <tr class="clickableRow"  *ngFor="let book of books">
-                <td>{{book.id}}</td>
                 <td>{{book.title}}</td>
                 <td>{{book.avaible ? 'Disponible' : 'Non disponible'}}</td>
                 <td>{{book.libraryName}}</td>
