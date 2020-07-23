@@ -39,28 +39,4 @@ public class UserDabataseConnect {
         }
         return user;
     }
-
-    public static User getUserFromDBByEmail(String email) {
-
-        User user = new User();
-
-        try (Connection connection = DriverManager.getConnection(DB_USER_URL, USER, PASS)) {
-            Class.forName(JDBC_DRIVER);
-            Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery("Select u.user_id from public.user u where u.email in ('" + email + "')");
-            while (rs.next()){
-                user.setId(rs.getLong("user_id"));
-            }
-
-            rs.close();
-
-        } catch (SQLException e) {
-            System.out.println("Connection failure.");
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            System.out.println("Fail to load driver");
-            e.printStackTrace();
-        }
-        return user;
-    }
 }

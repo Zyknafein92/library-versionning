@@ -99,6 +99,10 @@ export class MyProfilComponent implements OnInit {
     extendBorrow(id: number) {
         this.borrowService.updateBorrowStatus(id).subscribe( res => {
             this.initBorrow();
+        },
+            err => {
+                console.log('Error: ', err.error.message);
+                this.messageError = err.error.message;
         });
     }
 
