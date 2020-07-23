@@ -149,9 +149,8 @@
                         <tbody>
                         <tr class="clickableRow"  *ngFor="let reservation of reservations">
                           <td>{{reservation.bookTitle}}</td>
-                          <td *ngIf="reservation.reservationPosition == 1">{{reservation.bookReturn == null ? 'En attente de votre emprunt' : reservation.bookReturn | date: 'dd/MM/y'}}</td>
-                          <td *ngIf="reservation.reservationPosition == 2">{{reservation.bookReturn == null ? 'Reservé, en attente de retrait par un autre utilisateur.' : reservation.bookReturn | date: 'dd/MM/y'}}</td>
-                          <td>{{reservation.reservationPosition}}</td>
+                          <td *ngIf="reservation.reservationPosition == 1">{{reservation.bookReturn == null ? 'En attente de votre emprunt' : 'Retour envisagé le :' + reservation.bookReturn}}</td>
+                          <td *ngIf="reservation.reservationPosition == 2">{{reservation.bookReturn == null ? 'Reservé, en attente de retrait par un autre utilisateur.' : 'Retour envisagé le :' + reservation.bookReturn}}</td>
                           <td><button type="button" class="btn-danger" (click)="deleteReservation(this.reservation)">Annuler la réservation</button></td>
                         </tr>
                         </tbody>
