@@ -16,7 +16,7 @@ public class BorrowDatabaseConnect {
     static final String PASS = "admin";
 
 
-    public static Borrow getBorrowFromDBByBookID(String bookID) {
+    public  Borrow getBorrowFromDBByBookID(String bookID) {
 
         Borrow borrow = new Borrow();
 
@@ -45,7 +45,7 @@ public class BorrowDatabaseConnect {
         return borrow;
     }
 
-    public static Borrow getBorrowFromDBByUserID(Long userID) {
+    public Borrow getBorrowFromDBByUserID(Long userID) {
 
         Borrow borrow = new Borrow();
 

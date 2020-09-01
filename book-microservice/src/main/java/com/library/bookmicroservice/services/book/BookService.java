@@ -3,6 +3,7 @@ package com.library.bookmicroservice.services.book;
 import com.library.bookmicroservice.model.Book;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface BookService {
 
@@ -12,12 +13,12 @@ public interface BookService {
 
     List<Book> searchBooks(String criteria);
 
-    Book getBook(Long id);
+    Optional<Book> getBook(Long id);
 
     Book createBook(BookDTO bookDTO);
 
-    void updateBook(BookDTO bookDTO);
+    Book updateBook(BookDTO bookDTO);
 
-    void deleteBook(Long id);
+    Long deleteBook(Long id);
 
 }

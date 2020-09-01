@@ -25,5 +25,11 @@
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
       <jdbc-url>jdbc:postgresql://localhost:5432/bibliotheque-security</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="libraryDB" uuid="702eda33-f9e6-49d3-8f9b-83cbfdf600dc">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://localhost:5432/bibliotheque-library</jdbc-url>
+    </data-source>
   </component>
 </project>

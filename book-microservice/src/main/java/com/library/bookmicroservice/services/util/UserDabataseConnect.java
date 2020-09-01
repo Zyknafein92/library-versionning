@@ -16,7 +16,7 @@ public class UserDabataseConnect {
     static final String USER = "postgres";
     static final String PASS = "admin";
 
-    public static User getUserFromDB(String userID) {
+    public User getUserFromDB(String userID) {
 
         User user = new User();
 
@@ -40,7 +40,7 @@ public class UserDabataseConnect {
         return user;
     }
 
-    public static User getUserFromDBByEmail(String email) {
+    public User getUserFromDBByEmail(String email) {
 
         User user = new User();
 

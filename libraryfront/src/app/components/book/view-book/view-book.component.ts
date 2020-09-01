@@ -8,6 +8,7 @@ import {ReservationService} from "../../../../services/reservation.service";
 import {Reservation} from "../../../../models/reservation";
 import {TokenStorageService} from "../../../../services/security/token-storage.service";
 import {User} from "../../../../models/user";
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -25,7 +26,7 @@ export class ViewBookComponent implements OnInit {
     librarys: Array<Library>;
     messageError: string;
 
-    constructor(private bookService: BookService, private route: Router, private activatedRoute: ActivatedRoute, private libraryService: LibraryService, private reservationService: ReservationService, private tokenStorageService: TokenStorageService) {
+    constructor(private toastr: ToastrService,private bookService: BookService, private route: Router, private activatedRoute: ActivatedRoute, private libraryService: LibraryService, private reservationService: ReservationService, private tokenStorageService: TokenStorageService) {
     }
 
     ngOnInit() {
@@ -95,6 +96,7 @@ export class ViewBookComponent implements OnInit {
             response => {
                 console.log('reservation to create: ', response);
                 this.initReservations();
+                this.toastr.info('test');
                 this.bookService.getBook(book.id).subscribe(data => {
                     this.book = data;
                     this.initListBook();
@@ -102,6 +104,8 @@ export class ViewBookComponent implements OnInit {
             },
             err => {
                 console.log('Error: ', err.error.message);
+                console.log('error', err);
+                this.toastr.error(err.error);
                 this.messageError = err.error.message;
             });
     }

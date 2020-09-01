@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class LibraryServiceImpl implements LibraryService {
@@ -22,9 +23,7 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
     @Override
-    public Library getLibrary(Long id) {
-        return libraryRepository.getOne(id);
-    }
+    public Optional<Library> getLibrary(Long id) { return libraryRepository.findById(id); }
 
     @Override
     public Library createLibrary(LibraryDTO libraryDTO) {
@@ -33,15 +32,30 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
     @Override
-    public void updateLibrary(LibraryDTO libraryDTO) {
-        Library library = getLibrary(libraryDTO.getId());
+    public Library updateLibrary(LibraryDTO libraryDTO) {
+        Optional<Library> libraryOptional = getLibrary(libraryDTO.getId());
+        Library library = null;
+
+        if (libraryOptional.isPresent()){
+            library = new Library(
+            libraryOptional.get().getId(),
+            libraryOptional.get().getAddress(),
+            libraryOptional.get().getName(),
+            libraryOptional.get().getPhone()
+            );
+        }
+
         if(library == null) throw new LibraryNotFoundException(" La bibliothèque n'existe pas.");
         libraryMapper.updateLibraryFromLibraryDTO(libraryDTO,library);
         libraryRepository.save(library);
+        return library;
 
     }
 
     @Override
-    public void deleteLibrary(Long id) { libraryRepository.deleteById(id); }
+    public Long deleteLibrary(Long id) {
+        libraryRepository.deleteById(id);
+        return id;
+    }
 
 }

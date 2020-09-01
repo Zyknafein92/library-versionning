@@ -2,8 +2,8 @@ package com.library.bookmicroservice.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+
 import javax.persistence.*;
 import javax.validation.constraints.Null;
 import java.util.Date;
@@ -11,6 +11,9 @@ import java.util.Date;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Table(name = "reservation", schema = "public")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Reservation {

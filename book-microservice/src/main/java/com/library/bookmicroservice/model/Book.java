@@ -2,8 +2,7 @@ package com.library.bookmicroservice.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -14,6 +13,9 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Table(name = "book", schema = "public")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Book {
@@ -59,8 +61,5 @@ public class Book {
     @NotNull(message= "Veuillez renseigner l'id de la bibliothèque !")
     @Column(name = "library_ID")
     private String LibraryID;
-
-    public Book() {
-    }
 
 }

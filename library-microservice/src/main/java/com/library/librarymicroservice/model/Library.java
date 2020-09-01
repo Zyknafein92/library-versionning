@@ -1,8 +1,7 @@
 package com.library.librarymicroservice.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -10,6 +9,9 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Table(name= "library", schema="public")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Library {
@@ -30,8 +32,5 @@ public class Library {
     @NotNull(message= "Veuillez renseigner un numéro de téléphone !")
     @Column(name ="phone")
     private String phone;
-
-    public Library() {
-    }
 
 }

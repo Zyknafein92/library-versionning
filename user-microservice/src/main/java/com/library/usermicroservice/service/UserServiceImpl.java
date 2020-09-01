@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -23,8 +24,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUser(Long id) {
-        return userRepository.getOne(id);
+    public Optional<User> getUser(Long id) {
+        return userRepository.findById(id);
     }
 
     @Override
@@ -41,14 +42,33 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUser(UserDTO userDTO) {
-        User user = userRepository.getOne(userDTO.getId());
-        userMapper.updateUserFromUserDTO(userDTO, user);
+    public User updateUser(UserDTO userDTO) {
+        Optional<User> userOptional = getUser(userDTO.getId());
+        User user = null;
+
+        if(userOptional.isPresent()) {
+             user = new User (
+                    userOptional.get().getId(),
+                    userOptional.get().getFirstName(),
+                    userOptional.get().getLastName(),
+                    userOptional.get().getBirthday(),
+                    userOptional.get().getPhone(),
+                    userOptional.get().getEmail(),
+                    userOptional.get().getAddress(),
+                    userOptional.get().getPostalCode(),
+                    userOptional.get().getCity()
+            );
+        }
+        if(user == null) throw new UserNotFoundException("L'utilisateur recherché n'existe pas.");
+
+        user = userMapper.updateUserFromUserDTO(userDTO, user);
         userRepository.save(user);
+        return user;
     }
 
     @Override
-    public void deleteUser(Long id) {
+    public Long deleteUser(Long id) {
         userRepository.deleteById(id);
+        return id;
     }
 }
