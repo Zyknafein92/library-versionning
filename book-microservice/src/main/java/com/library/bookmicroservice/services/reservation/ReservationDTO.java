@@ -2,6 +2,7 @@ package com.library.bookmicroservice.services.reservation;
 
 
 import com.library.bookmicroservice.model.Book;
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,6 +11,7 @@ import java.util.Date;
 @Data
 @Getter
 @Setter
+@Builder
 public class ReservationDTO {
     Long id;
     Date date;

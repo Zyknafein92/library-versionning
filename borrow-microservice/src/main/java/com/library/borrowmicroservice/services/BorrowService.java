@@ -3,6 +3,7 @@ package com.library.borrowmicroservice.services;
 import com.library.borrowmicroservice.model.Borrow;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface BorrowService {
 
@@ -12,14 +13,14 @@ public interface BorrowService {
 
     List<Borrow> getMyBorrows(String id);
 
-    Borrow getBorrow(Long id);
+    Optional<Borrow> getBorrow(Long id);
 
     Borrow createBorrow(BorrowDTO borrowDTO);
 
-    void updateBorrow(BorrowDTO borrowDTO);
+    Borrow updateBorrow(BorrowDTO borrowDTO);
 
-    void updateBorrowExtendStatus(Long id);
+    Borrow updateBorrowExtendStatus(Long id);
 
-    void deleteBorrow(Long id);
+    Long deleteBorrow(Long id);
 
 }

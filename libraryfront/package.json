@@ -24,6 +24,7 @@
     "bootstrap": "^4.4.1",
     "chart.js": "^2.9.3",
     "jquery": "^3.5.1",
+    "ngx-toastr": "^11.3.3",
     "popper.js": "^1.16.0",
     "primeicons": "^2.0.0",
     "primeng": "^9.0.0-rc.4",

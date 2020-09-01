@@ -2,8 +2,7 @@ package com.library.usermicroservice.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -12,6 +11,9 @@ import java.util.Date;
 @Entity
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name= "user", schema="public")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User {
@@ -53,8 +55,5 @@ public class User {
     @NotNull(message= "Veuillez renseigner le champ: Ville")
     @Column(name="city")
     private String city;
-
-    public User() { }
-
 
 }

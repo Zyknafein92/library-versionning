@@ -1,5 +1,6 @@
 package com.library.bookmicroservice.services.book;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,6 +9,7 @@ import java.util.Date;
 @Data
 @Getter
 @Setter
+@Builder
 public class BookDTO {
 
     private Long id;

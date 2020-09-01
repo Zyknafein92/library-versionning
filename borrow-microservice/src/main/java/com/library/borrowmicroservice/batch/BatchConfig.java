@@ -28,8 +28,8 @@ public class BatchConfig {
     @Autowired
     EmailConfig emailConfig;
 
-    //@Scheduled(cron= "0 0 0 * * *") //tous les jours à minuit.
-    @Scheduled(fixedDelay = 120000) // toutes les 2 minutes pour démo.
+    @Scheduled(cron= "0 0 0 * * *") //tous les jours à minuit.
+    //@Scheduled(fixedDelay = 120000) // toutes les 2 minutes pour démo.
     public void runBatch() {
 
         borrowsOutDated =  getAllBorrowsOutDated();

@@ -10,6 +10,6 @@ public interface UserMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
             nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
-    void updateUserFromUserDTO(UserDTO userDTO, @MappingTarget User user);
+    User updateUserFromUserDTO(UserDTO userDTO, @MappingTarget User user);
 
 }

@@ -2,8 +2,8 @@ package com.library.borrowmicroservice.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -11,6 +11,9 @@ import java.util.Date;
 @Entity
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name= "borrow", schema="public")
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class Borrow {

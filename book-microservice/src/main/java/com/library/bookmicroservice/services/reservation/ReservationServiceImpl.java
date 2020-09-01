@@ -28,6 +28,12 @@ public class ReservationServiceImpl implements ReservationService {
     @Autowired
     private BookRepository bookRepository;
 
+    @Autowired
+    UserDabataseConnect userDabataseConnect;
+
+    @Autowired
+    BorrowDatabaseConnect borrowDatabaseConnect;
+
     @Override
     public Reservation getReservation(Long id) {
         return reservationRepository.getOne(id);
@@ -103,7 +109,7 @@ public class ReservationServiceImpl implements ReservationService {
 
     public void updateBookReservation(String bookID) {
         Book book = bookRepository.getOne(Long.valueOf(bookID));
-        Borrow borrow = BorrowDatabaseConnect.getBorrowFromDBByBookID(bookID);
+        Borrow borrow = borrowDatabaseConnect.getBorrowFromDBByBookID(bookID);
         List<Reservation> reservationList = reservationRepository.findAllByBookID(bookID);
         Date today = new Date();
 
@@ -142,37 +148,29 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     private boolean checkUserApplyForBorrowBook(ReservationDTO reservationDTO) {
-
-//        Borrow borrow = BorrowDatabaseConnect.getBorrowFromDBByBookID(reservationDTO.getBookID());
-//        if (borrow.getBookID() != null) {
-//            User user = UserDabataseConnect.getUserFromDB(borrow.getUserID());
-//            return user.getEmail().equals(reservationDTO.userEmail);
-//        }
-
         boolean check = false;
-        User user = UserDabataseConnect.getUserFromDBByEmail(reservationDTO.userEmail);
+        User user = userDabataseConnect.getUserFromDBByEmail(reservationDTO.userEmail);
         List<Book> books = bookRepository.findByTitle(reservationDTO.bookTitle);
 
         for (Book book : books) {
-            Borrow borrow = BorrowDatabaseConnect.getBorrowFromDBByBookID(String.valueOf(book.getId()));
+            Borrow borrow = borrowDatabaseConnect.getBorrowFromDBByBookID(String.valueOf(book.getId()));
 
             if(borrow.getBookID() != null) {
                 check = borrow.getUserID().equals(String.valueOf(user.getId()));
                 return check;
             }
         }
-
         return false;
     }
 
     private Date updateAvaibleDateWithDTO(ReservationDTO reservationDTO) {
-        Borrow borrow = BorrowDatabaseConnect.getBorrowFromDBByBookID(reservationDTO.getBookID());
+        Borrow borrow = borrowDatabaseConnect.getBorrowFromDBByBookID(reservationDTO.getBookID());
         if(borrow.getIsExtend() != null) return borrow.getIsExtend() ? borrow.getDateExtend() : borrow.getDateEnd();
         else return null;
     }
 
     private Date updateAvaibleDate(Reservation reservation) {
-        Borrow borrow = BorrowDatabaseConnect.getBorrowFromDBByBookID(reservation.getBookID());
+        Borrow borrow = borrowDatabaseConnect.getBorrowFromDBByBookID(reservation.getBookID());
         if(borrow.getIsExtend() != null) return borrow.getIsExtend() ? borrow.getDateExtend() : borrow.getDateEnd();
         else return null;
     }

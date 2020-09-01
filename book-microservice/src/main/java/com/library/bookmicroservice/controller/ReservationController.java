@@ -1,5 +1,6 @@
 package com.library.bookmicroservice.controller;
 
+import com.library.bookmicroservice.exceptions.ReservationLimitException;
 import com.library.bookmicroservice.model.Book;
 import com.library.bookmicroservice.model.Reservation;
 import com.library.bookmicroservice.services.book.BookDTO;
@@ -19,11 +20,11 @@ public class ReservationController {
     @Autowired
     ReservationService reservationService;
 
-    @GetMapping(value= "/api/reservation/{id}")
+    @GetMapping(value = "/api/reservation/{id}")
     public ResponseEntity<Reservation> getReservation(@PathVariable("id") Long id) {
         Reservation reservation = reservationService.getReservation(id);
-        if(reservation == null) return ResponseEntity.noContent().build();
-        return new ResponseEntity<>(reservation,HttpStatus.OK);
+        if (reservation == null) return ResponseEntity.noContent().build();
+        return new ResponseEntity<>(reservation, HttpStatus.OK);
     }
 
     @GetMapping(value = "/api/reservations/email/{email}")
@@ -34,25 +35,31 @@ public class ReservationController {
     }
 
 
-    @GetMapping(value= "/api/reservations")
+    @GetMapping(value = "/api/reservations")
     public ResponseEntity<List<Reservation>> getReservations() {
         List<Reservation> reservations = reservationService.getReservations();
-        if(reservations == null) return ResponseEntity.noContent().build();
+        if (reservations == null) return ResponseEntity.noContent().build();
         return new ResponseEntity<>(reservations, HttpStatus.OK);
     }
 
-    @GetMapping(value= "api/reservations/{id}")
-    public ResponseEntity<List<Reservation>> getReservationsByBookID(@PathVariable("id") String id){
+    @GetMapping(value = "api/reservations/{id}")
+    public ResponseEntity<List<Reservation>> getReservationsByBookID(@PathVariable("id") String id) {
         List<Reservation> reservations = reservationService.getReservationsByBookID(id);
-        if(reservations == null) return ResponseEntity.noContent().build();
+        if (reservations == null) return ResponseEntity.noContent().build();
         return new ResponseEntity<>(reservations, HttpStatus.OK);
     }
 
-    @PostMapping(value= "api/reservation/addReservation")
-    public ResponseEntity<Reservation> createReservation(@RequestBody ReservationDTO reservationDTO) {
-        Reservation cReservation = reservationService.createReservation(reservationDTO);
-        if (cReservation == null) return ResponseEntity.noContent().build();
-        return new ResponseEntity<>(cReservation, HttpStatus.CREATED);
+    @PostMapping(value = "api/reservation/addReservation")
+    public ResponseEntity createReservation(@RequestBody ReservationDTO reservationDTO) {
+        try {
+            Reservation cReservation = reservationService.createReservation(reservationDTO);
+            if (cReservation == null)
+                return ResponseEntity.noContent().build();
+            return new ResponseEntity<>(cReservation, HttpStatus.CREATED);
+        } catch (ReservationLimitException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
+        }
     }
 
     @PutMapping(value = "api/reservation/checkReservation")
@@ -61,7 +68,7 @@ public class ReservationController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping(value= "api/reservation/updateReservation")
+    @PutMapping(value = "api/reservation/updateReservation")
     public ResponseEntity<Void> updateReservation(@RequestBody ReservationDTO reservationDTO) {
         reservationService.updateReservation(reservationDTO);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -69,7 +76,7 @@ public class ReservationController {
 
 
     @RequestMapping(value = "/api/reservation/deleteReservation", method = RequestMethod.DELETE)
-    public ResponseEntity<Void> deleteReservation(@RequestParam(name = "id", defaultValue = "") Long id){
+    public ResponseEntity<Void> deleteReservation(@RequestParam(name = "id", defaultValue = "") Long id) {
         Reservation reservation = reservationService.getReservation(id);
         if (reservation == null) {
             return ResponseEntity.noContent().build();

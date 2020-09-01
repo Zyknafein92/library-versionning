@@ -24,6 +24,7 @@ import {BorrowEditComponent} from './components/book/borrow-edit/borrow-edit.com
 import {AdminComponent} from './components/admin/admin/admin.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
+import { ToastrModule } from 'ngx-toastr';
 
 
 @NgModule({
@@ -52,6 +53,7 @@ import {HttpClientModule} from "@angular/common/http";
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
+    ToastrModule.forRoot(),
   ],
   providers: [httpInterceptorProviders],
   bootstrap: [AppComponent]
