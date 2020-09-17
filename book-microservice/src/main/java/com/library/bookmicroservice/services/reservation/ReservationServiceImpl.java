@@ -1,6 +1,7 @@
 package com.library.bookmicroservice.services.reservation;
 
 import com.library.bookmicroservice.exceptions.ReservationLimitException;
+import com.library.bookmicroservice.exceptions.ReservationNotFoundException;
 import com.library.bookmicroservice.model.*;
 import com.library.bookmicroservice.repository.BookRepository;
 import com.library.bookmicroservice.repository.ReservationRepository;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ReservationServiceImpl implements ReservationService {
@@ -35,8 +37,8 @@ public class ReservationServiceImpl implements ReservationService {
     BorrowDatabaseConnect borrowDatabaseConnect;
 
     @Override
-    public Reservation getReservation(Long id) {
-        return reservationRepository.getOne(id);
+    public Optional<Reservation> getReservation(Long id) {
+        return reservationRepository.findById(id);
     }
 
     @Override
@@ -56,9 +58,9 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public Reservation createReservation(ReservationDTO reservationDTO) {
+        List<Reservation> reservationList = reservationRepository.findAllByBookID(reservationDTO.getBookID());
+        Book book = bookRepository.getOne(Long.valueOf(reservationDTO.getBookID()));
         Reservation reservation = reservationMapper.reservatioDtoToReservation(reservationDTO);
-        List<Reservation> reservationList = reservationRepository.findAllByBookID(reservationDTO.bookID);
-        Book book = bookRepository.getOne(Long.valueOf(reservationDTO.bookID));
 
         if (!checkReservationCountByBook(reservationDTO))
             throw new ReservationLimitException("Aucune réservation supplémentaire n'est disponible pour cet ouvrage.");
@@ -66,24 +68,21 @@ public class ReservationServiceImpl implements ReservationService {
             throw new ReservationLimitException("Vous ne pouvez réserver qu'un exemplaire de cet ouvrage");
         if (checkUserApplyForBorrowBook(reservationDTO))
             throw new ReservationLimitException("Vous ne pouvez pas réserver un livre que vous êtes actuellement entrain d'emprunter");
-        else {
 
+        else {
             if(reservationList.isEmpty() && book.getAvaible()) {
                 Date today = new Date();
                 reservation.setDate(today);
                 reservation.setReservationPosition(1);
-                Email email = emailService.createEmailInformations(reservation);
-                emailService.sendEmailReservation(email);
+                createAndSendEmail(reservation);
             }
 
             if(reservationList.isEmpty() && !book.getAvaible()) {
-                reservation.setReservationPosition(1);
-                reservation.setBookReturn(updateAvaibleDateWithDTO(reservationDTO));
+                setReservationPosition(reservationDTO, reservation, 1);
             }
 
             if(!reservationList.isEmpty()) {
-                reservation.setReservationPosition(2);
-                reservation.setBookReturn(updateAvaibleDateWithDTO(reservationDTO));
+                setReservationPosition(reservationDTO, reservation, 2);
             }
 
             book.setAvaible(false);
@@ -94,18 +93,36 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public void updateReservation(ReservationDTO reservationDTO) {
-        Reservation reservation = reservationRepository.getOne(reservationDTO.getId());
-        if(reservation.getId() == null) {
-            throw new RuntimeException("La réservation de ce livre n'existe pas ou elle est introuvable");
+    public Reservation updateReservation(ReservationDTO reservationDTO) {
+        Optional<Reservation> reservationOptional = getReservation(reservationDTO.getId());
+        Reservation reservation = null;
+
+        if(reservationOptional.isPresent()) {
+            reservation = new Reservation(
+                    reservationOptional.get().getId(),
+                    reservationOptional.get().getDate(),
+                    reservationOptional.get().getUserEmail(),
+                    reservationOptional.get().getBookID(),
+                    reservationOptional.get().getBookTitle(),
+                    reservationOptional.get().getBookReturn(),
+                    reservationOptional.get().getReservationPosition()
+
+            );
+        }
+        if(reservation == null) {
+            throw new ReservationNotFoundException("La réservation de ce livre n'existe pas ou elle est introuvable");
         } else {
             reservationMapper.updateReservationFromReservationDTO(reservationDTO, reservation);
             reservationRepository.save(reservation);
         }
+        return reservation;
     }
 
     @Override
-    public void deleteReservation(Long id) { reservationRepository.deleteById(id); }
+    public Long deleteReservation(Long id) {
+        reservationRepository.deleteById(id);
+        return id;
+    }
 
     public void updateBookReservation(String bookID) {
         Book book = bookRepository.getOne(Long.valueOf(bookID));
@@ -122,35 +139,44 @@ public class ReservationServiceImpl implements ReservationService {
 
             if(borrow.getId() == null) {
                 reservation.setDate(today);
-                Email email = emailService.createEmailInformations(reservation);
-                emailService.sendEmailReservation(email);
+                Email email = createAndSendEmail(reservation);
             }
             reservationRepository.save(reservation);
         } else if(borrow.getId() == null){
             book.setAvaible(true);
             bookRepository.save(book);
         }
+    }
 
+    private Email createAndSendEmail(Reservation reservation) {
+        Email email = emailService.createEmailInformations(reservation);
+        emailService.sendEmailReservation(email);
+        return email;
+    }
+
+    private void setReservationPosition(ReservationDTO reservationDTO, Reservation reservation, int i) {
+        reservation.setReservationPosition(i);
+        reservation.setBookReturn(updateAvaibleDateWithDTO(reservationDTO));
     }
 
     private boolean checkReservationCountByBook(ReservationDTO reservationDTO) {
-        List<Reservation> reservations = this.reservationRepository.findAllByBookID(reservationDTO.bookID);
+        List<Reservation> reservations = this.reservationRepository.findAllByBookID(reservationDTO.getBookID());
         return reservations.size() <= 1;
     }
 
     private boolean checkUserDoubleReservation(ReservationDTO reservationDTO) {
         boolean check = false;
-        List<Reservation> reservations = this.reservationRepository.findAllByBookID(reservationDTO.bookID);
+        List<Reservation> reservations = this.reservationRepository.findAllByBookID(reservationDTO.getBookID());
         for (Reservation reservation : reservations) {
-            check = reservation.getUserEmail().equals(reservationDTO.userEmail) && reservation.getBookTitle().equals(reservationDTO.bookTitle);
+            check = reservation.getUserEmail().equals(reservationDTO.getUserEmail()) && reservation.getBookTitle().equals(reservationDTO.getBookTitle());
         }
         return check;
     }
 
     private boolean checkUserApplyForBorrowBook(ReservationDTO reservationDTO) {
         boolean check = false;
-        User user = userDabataseConnect.getUserFromDBByEmail(reservationDTO.userEmail);
-        List<Book> books = bookRepository.findByTitle(reservationDTO.bookTitle);
+        User user = userDabataseConnect.getUserFromDBByEmail(reservationDTO.getUserEmail());
+        List<Book> books = bookRepository.findByTitle(reservationDTO.getBookTitle());
 
         for (Book book : books) {
             Borrow borrow = borrowDatabaseConnect.getBorrowFromDBByBookID(String.valueOf(book.getId()));

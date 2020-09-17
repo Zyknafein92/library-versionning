@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -30,9 +31,8 @@ public class UserServiceImpl implements UserService {
     PasswordEncoder encoder;
 
     @Override
-    public User getUser(Long id) {
-        User user = userRepository.getOne(id);
-        return user;
+    public Optional<User> getUser(Long id) {
+       return userRepository.findById(id);
     }
 
     @Override
@@ -52,16 +52,28 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUser(UserDTO userDTO) {
-        User user = getUser(userDTO.getId());
-        if(user == null) throw new UserNotFoundException(" L'utilisateur n'existe pas");
+    public User updateUser(UserDTO userDTO) {
+        User user = null;
+        Optional<User> optionalUser = getUser(userDTO.getId());
+
+        if(optionalUser.isPresent()) {
+            user = new User (
+                    optionalUser.get().getId(),
+                    optionalUser.get().getEmail(),
+                    optionalUser.get().getPassword(),
+                    optionalUser.get().getRoles());
+        }
+        else throw new UserNotFoundException(" L'utilisateur n'existe pas");
+
         userDTO.setPassword(encoder.encode(userDTO.getPassword()));
         userMapper.updateUserFromUserDTO(userDTO, user);
         userRepository.save(user);
+        return user;
     }
 
     @Override
-    public void deleteUser(Long id) {
+    public Long deleteUser(Long id) {
         userRepository.deleteById(id);
+        return id;
     }
 }

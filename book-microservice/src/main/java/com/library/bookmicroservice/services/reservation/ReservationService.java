@@ -3,10 +3,11 @@ package com.library.bookmicroservice.services.reservation;
 import com.library.bookmicroservice.model.Reservation;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ReservationService {
 
-    Reservation getReservation(Long id);
+    Optional<Reservation> getReservation(Long id);
 
     List<Reservation> getReservations();
 
@@ -16,9 +17,9 @@ public interface ReservationService {
 
     Reservation createReservation(ReservationDTO reservationDTO);
 
-    void updateReservation(ReservationDTO reservationDTO);
+    Reservation updateReservation(ReservationDTO reservationDTO);
 
-    void deleteReservation(Long id);
+    Long deleteReservation(Long id);
 
     void updateBookReservation(String bookID);
 

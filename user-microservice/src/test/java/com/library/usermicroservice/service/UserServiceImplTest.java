@@ -58,61 +58,61 @@ class UserServiceImplTest {
     }
 
 
-
     @Test
     void testGetUsers_GivenListUsers_ReturnList() {
         when(userRepository.findAll()).thenReturn(userList);
-
         assertEquals(2, service.getUsers().size());
     }
 
     @Test
     void testGetUsers_GivenNull_ReturnNull() {
         when(userRepository.findAll()).thenReturn(null);
-
         assertNull(service.getUsers());
+    }
+
+    @Test
+    void testGetUser_GivenID_ReturnUser() {
+        when(userRepository.findById((long)1)).thenReturn(java.util.Optional.ofNullable(user1));
+        assertThat(service.getUser((long)1)).isEqualTo(java.util.Optional.ofNullable(user1));
     }
 
     @Test
     void testGetMyProfil_GivenEmail_ReturnUser() {
         when(userRepository.findByEmail(user1.getEmail())).thenReturn(user1);
-
         assertThat(service.getMyProfil(user1.getEmail())).isEqualTo(user1);
     }
 
     @Test
     void testGetMyProfil_GivenNull_ReturnNull() {
         when(userRepository.findByEmail(null)).thenReturn(null);
-
-        assertThrows(UserNotFoundException.class, () -> service.getMyProfil(null));
+        UserNotFoundException userNotFoundException = assertThrows(UserNotFoundException.class, () -> service.getMyProfil(null));
+        assertThat(userNotFoundException.getMessage()).isEqualTo(" L'utilisateur n'existe pas");
     }
 
     @Test
     void testGetMyProfil_GivenWrongEmail_ReturnNull() {
         when(userRepository.findByEmail("test")).thenReturn(null);
-
-        assertThrows(UserNotFoundException.class, () -> service.getMyProfil("test"));
+        UserNotFoundException userNotFoundException = assertThrows(UserNotFoundException.class, () -> service.getMyProfil("test"));
+        assertThat(userNotFoundException.getMessage()).isEqualTo(" L'utilisateur n'existe pas");
     }
 
     @Test
     void testCreateUser_GivenAllInformations_ReturnUser() {
         when(userRepository.save(mapper.userDtoToUser(userDTO))).thenReturn(user1);
-
         assertThat(service.createUser(userDTO)).isEqualTo(user1);
     }
 
     @Test
-    void updateUser() {
-        when(userRepository.getOne(userDTO.getId())).thenReturn(user1);
-        when(mapper.updateUserFromUserDTO(userDTO,user1)).thenReturn(user1);
-
-        service.updateUser(userDTO);
-        assertThat(service.updateUser(userDTO)).isEqualTo(user1);
-
+    void testUpdateUser_GivenWrongID_ReturnError() {
+        when(service.getUser((long)1)).thenReturn(java.util.Optional.empty());
+        UserNotFoundException userNotFoundException = assertThrows(UserNotFoundException.class, () -> service.updateUser(userDTO));
+        assertThat(userNotFoundException.getMessage()).isEqualTo("L'utilisateur recherché n'existe pas.");
     }
 
-    @Test
-    void deleteUser() {
 
+    @Test
+    void deleteUser_GivenID_ReturnID() {
+        when(userRepository.findById((long)1)).thenReturn(java.util.Optional.ofNullable(user1));
+        assertThat(service.deleteUser((long)1)).isEqualTo(user1.getId());
     }
 }

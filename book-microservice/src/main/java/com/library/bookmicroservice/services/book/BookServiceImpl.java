@@ -35,7 +35,6 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<Book> searchBooks(String criteria) {
         List<Book> searchResult = bookRepository.searchBook(criteria);
-        if(searchResult == null) throw new BookNotFoundException("Aucun livre ne correspond à la recherche");
         return searchResult;
     }
 

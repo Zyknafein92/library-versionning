@@ -60,6 +60,5 @@ public class Book {
 
     @NotNull(message= "Veuillez renseigner l'id de la bibliothèque !")
     @Column(name = "library_ID")
-    private String LibraryID;
-
+    private String libraryID;
 }

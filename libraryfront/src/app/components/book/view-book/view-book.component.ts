@@ -96,7 +96,7 @@ export class ViewBookComponent implements OnInit {
             response => {
                 console.log('reservation to create: ', response);
                 this.initReservations();
-                this.toastr.info('test');
+                this.toastr.success('Votre réservation a été prise en compte');
                 this.bookService.getBook(book.id).subscribe(data => {
                     this.book = data;
                     this.initListBook();
@@ -105,8 +105,7 @@ export class ViewBookComponent implements OnInit {
             err => {
                 console.log('Error: ', err.error.message);
                 console.log('error', err);
-                this.toastr.error(err.error);
-                this.messageError = err.error.message;
+                this.toastr.error(err.error.message ||err.error.errors);
             });
     }
 
