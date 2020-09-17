@@ -58,8 +58,8 @@ public class BookController {
 
     @RequestMapping(value = "/api/book/updateBook", method = RequestMethod.PUT)
     public ResponseEntity<Book> updateBook(@Valid @RequestBody BookDTO bookDTO) {
-        bookService.updateBook(bookDTO);
-        return new ResponseEntity<>(HttpStatus.OK);
+       Book book = bookService.updateBook(bookDTO);
+        return new ResponseEntity<>(book, HttpStatus.OK);
     }
 
 //    @RequestMapping(value= "/api/book/updateBookStatus", method = RequestMethod.PUT)
@@ -73,6 +73,6 @@ public class BookController {
         Optional<Book> book = bookService.getBook(Long.valueOf(id));
         if (!book.isPresent()) throw new ResponseStatusException(NOT_FOUND, "Le livre n'existe pas.");
         bookService.deleteBook(book.get().getId());
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(book.get().getId(), HttpStatus.OK);
     }
 }

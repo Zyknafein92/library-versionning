@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.Null;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
@@ -21,26 +21,30 @@ public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "reservation_id")
-    Long id;
+    private Long id;
 
     @Column(name = "date")
     @JsonFormat(pattern="yyyy-MM-dd", shape = JsonFormat.Shape.STRING, timezone = "CET", locale = "fr-FR")
-    Date date;
+    private Date date;
 
+    @NotNull(message= "Veuillez renseigner un email utilisateur !")
     @Column(name = "user_email")
-    String userEmail;
+    @NotNull
+    private String userEmail;
 
+    @NotNull(message= "Veuillez renseigner un id de livre !")
     @Column(name = "book_id")
-    String bookID;
+    private String bookID;
 
+    @NotNull(message= "Veuillez renseigner un titre de livre !")
     @Column(name = "book_title")
-    String bookTitle;
+    private String bookTitle;
 
-    @Column(name = "book_return", nullable = true)
+    @Column(name = "book_return")
     @JsonFormat(pattern="yyyy-MM-dd", shape = JsonFormat.Shape.STRING, timezone = "CET", locale = "fr-FR")
-    Date bookReturn;
+    private Date bookReturn;
 
     @Column(name = "user_position")
-    Integer reservationPosition;
+    private Integer reservationPosition;
 
 }

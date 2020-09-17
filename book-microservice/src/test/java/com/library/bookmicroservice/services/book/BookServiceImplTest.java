@@ -40,8 +40,8 @@ class BookServiceImplTest {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        book = Book.builder().id((long) 1).title("testBook").author("testBook").description("testBook").editor("testBook").parution(new Date()).gender("testBook").picture("testBook").avaible(true).LibraryID("1").build();
-        book2 = Book.builder().id((long) 2).title("test2Book").author("test2Book").description("tes2tBook").editor("test2Book").parution(new Date()).gender("test2Book").picture("test2Book").avaible(true).LibraryID("2").build();
+        book = Book.builder().id((long) 1).title("testBook").author("testBook").description("testBook").editor("testBook").parution(new Date()).gender("testBook").picture("testBook").avaible(true).libraryID("1").build();
+        book2 = Book.builder().id((long) 2).title("test2Book").author("test2Book").description("tes2tBook").editor("test2Book").parution(new Date()).gender("test2Book").picture("test2Book").avaible(true).libraryID("2").build();
         bookDTO = BookDTO.builder().id((long) 1).title("testBook").author("testBook").description("testBook").editor("testBook").parution(new Date()).gender("testBook").picture("testBook").avaible(true).libraryID("1").build();
     }
 
@@ -79,10 +79,11 @@ class BookServiceImplTest {
         assertThat(service.searchBooks("testBook").size()).isEqualTo(1);
     }
 
+
     @Test
     void getBook_GivenBook_ReturnBook() {
-        when(repository.getOne((long) 1)).thenReturn(book);
-        assertThat(service.getBook((long) 1)).isEqualTo(book);
+        when(repository.findById((long) 1)).thenReturn(java.util.Optional.ofNullable(book));
+        assertThat(service.getBook((long) 1)).isEqualTo(java.util.Optional.ofNullable(book));
     }
 
     @Test
@@ -93,6 +94,7 @@ class BookServiceImplTest {
         assertThat(service.createBook(bookDTO)).isEqualTo(book);
     }
 
+
     @Test
     void updateBook_GivenNull_ReturnNull() {
         book = null;
@@ -102,6 +104,8 @@ class BookServiceImplTest {
     }
 
     @Test
-    void deleteBook() {
+    void deleteBook_GivenID_ReturnID() {
+        when(repository.findById((long) 1)).thenReturn(java.util.Optional.ofNullable(book));
+        assertThat(service.deleteBook((long)1)).isEqualTo(1);
     }
 }

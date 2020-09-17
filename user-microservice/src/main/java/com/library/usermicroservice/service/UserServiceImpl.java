@@ -56,9 +56,9 @@ public class UserServiceImpl implements UserService {
                     userOptional.get().getEmail(),
                     userOptional.get().getAddress(),
                     userOptional.get().getPostalCode(),
-                    userOptional.get().getCity()
-            );
+                    userOptional.get().getCity());
         }
+
         if(user == null) throw new UserNotFoundException("L'utilisateur recherché n'existe pas.");
 
         user = userMapper.updateUserFromUserDTO(userDTO, user);

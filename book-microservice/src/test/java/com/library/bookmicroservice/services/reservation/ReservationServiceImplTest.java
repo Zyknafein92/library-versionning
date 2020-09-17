@@ -1,6 +1,7 @@
 package com.library.bookmicroservice.services.reservation;
 
 import com.library.bookmicroservice.exceptions.ReservationLimitException;
+import com.library.bookmicroservice.exceptions.ReservationNotFoundException;
 import com.library.bookmicroservice.model.*;
 import com.library.bookmicroservice.repository.BookRepository;
 import com.library.bookmicroservice.repository.ReservationRepository;
@@ -69,7 +70,7 @@ class ReservationServiceImplTest {
     public void setup() {
         MockitoAnnotations.initMocks(this);
         formater = new SimpleDateFormat("dd-MM-yy");
-        bookAvaible = Book.builder().id((long) 1).title("testBook").author("testBook").description("testBook").editor("testBook").parution(new Date()).gender("testBook").picture("testBook").avaible(true).LibraryID("1").build();
+        bookAvaible = Book.builder().id((long) 1).title("testBook").author("testBook").description("testBook").editor("testBook").parution(new Date()).gender("testBook").picture("testBook").avaible(true).libraryID("1").build();
         reservation = Reservation.builder().id((long) 1).bookID("1").bookTitle("testBook").bookReturn(null).date(null).userEmail("test@gmail.com").reservationPosition(null).build();
         rDTO = ReservationDTO.builder().id((long) 1).bookID("1").bookTitle("testBook").bookReturn(null).date(null).userEmail("test@gmail.com").reservationPosition(null).build();
         reservation2 =  Reservation.builder().id((long) 1).bookID("1").bookTitle("testBook").bookReturn(null).date(null).userEmail("test2@gmail.com").reservationPosition(null).build();
@@ -80,8 +81,8 @@ class ReservationServiceImplTest {
 
     @Test
     void getReservation_GivenReservation_ReturnReservation() {
-        when(repository.getOne((long) 1)).thenReturn(reservation);
-        assertThat(service.getReservation((long) 1)).isEqualTo(reservation);
+        when(repository.findById((long) 1)).thenReturn(java.util.Optional.ofNullable(reservation));
+        assertThat(service.getReservation((long) 1)).isEqualTo(java.util.Optional.ofNullable(reservation));
     }
 
     @Test
@@ -196,7 +197,7 @@ class ReservationServiceImplTest {
     }
 
     @Test
-    void createReservation_GivenListReturnReservation() {
+    void createReservation_GivenList_ReturnReservation() {
         reservationList.add(reservation);
         List<Book> bookList = new ArrayList<>();
         bookAvaible.setAvaible(false);
@@ -221,52 +222,15 @@ class ReservationServiceImplTest {
         assertThat(reservation2.getReservationPosition()).isEqualTo(2);
     }
 
-//    @Test
-//    void updateReservation_GivenReservation_ReturnModifiedReservation() {
-//        rDTO2 = ReservationDTO.builder().id((long) 1).bookID("1").bookTitle("test2Book").bookReturn(null).date(null).userEmail("test2@gmail.com").reservationPosition(null).build();
-//
-//        when(repository.getOne(rDTO2.getId())).thenReturn(reservation);
-//
-//        service.updateReservation(rDTO2);
-//
-//
-//        assertThat(reservation.getId()).isEqualTo(rDTO2.id);
-//        assertThat(reservation.getBookID()).isEqualTo(rDTO2.bookID);
-//        assertThat(reservation.getBookTitle()).isEqualTo(rDTO2.bookTitle);
-//        assertThat(reservation.getUserEmail()).isEqualTo(rDTO2.userEmail);
-//    }
-
-//    @Test
-//    void deleteReservation() {
-//
-//    }
-
     @Test
-    void updateBookReservation_GivenReservartionListAndBorrowBookReturnReservationInFirstPos() {
-        reservationList.add(reservation);
-        borrow = Borrow.builder().id((long) 1).bookID("1").dateStart(null).dateEnd(new Date()).dateExtend(null).isExtend(false).userID("1").build();
-
-        when(bookRepository.getOne((long) 1)).thenReturn(bookAvaible);
-        when(borrowDatabaseConnect.getBorrowFromDBByBookID(rDTO.getBookID())).thenReturn(borrow);
-        when(repository.findAllByBookID("1")).thenReturn(reservationList);
-
-        service.updateReservation(rDTO);
-
-        String today = formater.format(new Date());
-        String bookReturn = formater.format(reservationList.get(0).getBookReturn());
-
-        assertThat(bookAvaible.getAvaible()).isEqualTo(false);
-        assertThat(today).isEqualTo(bookReturn);
-        assertThat(reservationList.get(0).getReservationPosition()).isEqualTo(1);
+    void updateReservation_GivenWrongID_ReturnError() {
+        when(repository.findById((long)1)).thenReturn(java.util.Optional.empty());
+        ReservationNotFoundException reservationNotFoundException = assertThrows(ReservationNotFoundException.class, () -> service.updateReservation(rDTO));
+        assertThat(reservationNotFoundException.getMessage()).isEqualTo("La réservation de ce livre n'existe pas ou elle est introuvable");
     }
 
     @Test
-    void updateBookReservation_GivenReservationListAndNullBorrowBookReturnReservationAndSendEmail() {
-
-    }
-
-    @Test
-    void updateBookReservation_GivenEmptyListAndNullBorrowBookReturnAvaibleBook() {
-
+    void deleteReservation() {
+       assertThat(service.deleteReservation((long)1)).isEqualTo(reservation.getId());
     }
 }

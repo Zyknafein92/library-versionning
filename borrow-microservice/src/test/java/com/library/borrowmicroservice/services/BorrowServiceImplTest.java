@@ -1,8 +1,10 @@
 package com.library.borrowmicroservice.services;
 
+import com.library.borrowmicroservice.exceptions.BorrowNotFoundException;
 import com.library.borrowmicroservice.exceptions.BorrowRulesException;
 import com.library.borrowmicroservice.model.Borrow;
 import com.library.borrowmicroservice.repository.BorrowRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -86,10 +88,11 @@ class BorrowServiceImplTest {
 
     @Test
     void getBorrow_GivenBorrow_ReturnBorrow() {
-        when(repository.getOne((long)1)).thenReturn(borrow1);
+        when(repository.findById((long)1)).thenReturn(java.util.Optional.ofNullable(borrow1));
 
-        assertThat(service.getBorrow((long) 1)).isEqualTo(borrow1);
+        assertThat(service.getBorrow((long) 1)).isEqualTo(java.util.Optional.ofNullable(borrow1));
     }
+
 
     @Test
     void createBorrow_GivenBorrowDTO_ReturnBorrow(){
@@ -109,32 +112,43 @@ class BorrowServiceImplTest {
     }
 
     @Test
-    void updateBorrowExtendStatus_GivenBorrowReturnBorrow() throws ParseException {
-        String sDate1="31/08/2020";
+    void updateBorrow_GivenNull_ReturnException(){
+        when(service.getBorrow((long)1)).thenReturn(java.util.Optional.empty());
+        BorrowNotFoundException borrowNotFoundException = assertThrows(BorrowNotFoundException.class, () -> service.updateBorrow(borrowDTO));
+        assertThat(borrowNotFoundException.getMessage()).isEqualTo("L'emprunt recherché n'a pas été trouvé");
+    }
+
+
+    @Test
+    void updateBorrowExtendStatus_GivenBorrow_ReturnBorrow() throws ParseException {
+        String sDate1="30/09/2020";
         Date date = new SimpleDateFormat("dd/MM/yyyy").parse(sDate1);
         borrow1.setDateEnd(date);
-        when(repository.getOne((long) 1)).thenReturn(borrow1);
+        when(service.getBorrow((long)1)).thenReturn(java.util.Optional.ofNullable(borrow1));
 
-        service.updateBorrowExtendStatus((long)1);
-
-        assertThat(borrow1.getIsExtend()).isEqualTo(true);
+        assertThat(service.updateBorrowExtendStatus((long)1).getIsExtend()).isEqualTo(true);
     }
 
     @Test
-    void updateBorrow_GivenBorrowExtend_ReturnException() {
+    void updateBorrowExtendStatus_GivenNull_ReturnException() {
+        when(service.getBorrow((long)1)).thenReturn(java.util.Optional.empty());
+        BorrowNotFoundException borrowNotFoundException = assertThrows(BorrowNotFoundException.class, () -> service.updateBorrowExtendStatus((long)1));
+        assertThat(borrowNotFoundException.getMessage()).isEqualTo("L'emprunt recherché n'a pas été trouvé");
+    }
+
+    @Test
+    void updateBorrowExtendStatus_GivenBorrowExtend_ReturnException() {
         borrow1.setDateEnd(new Date());
-        when(repository.getOne((long) 1)).thenReturn(borrow1);
+        when(repository.findById((long) 1)).thenReturn(java.util.Optional.ofNullable(borrow1));
         BorrowRulesException borrowRulesException = assertThrows(BorrowRulesException.class, () -> service.updateBorrowExtendStatus((long)1));
         assertThat(borrowRulesException.getMessage()).isEqualTo("Vous ne pouvez plus prolonger votre emprunt après la date butoir. " +
                 "Merci de restituer l'ouvrage le plus rapidement possible.");
     }
 
-    @Test
-    void updateBorrow() {
-
-    }
 
     @Test
     void deleteBorrow() {
+        when(repository.findById((long) 1)).thenReturn(java.util.Optional.ofNullable(borrow1));
+        Assertions.assertThat(service.deleteBorrow((long)1)).isEqualTo(1);
     }
 }
