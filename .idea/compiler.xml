@@ -9,7 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="eureka-server" />
       </profile>
-      <profile name="Annotation profile for user-microservice" enabled="true">
+      <profile name="Annotation profile for gateway" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -29,8 +29,8 @@
           <entry name="$MAVEN_REPOSITORY$/joda-time/joda-time/2.9/joda-time-2.9.jar" />
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.10/lombok-1.18.10.jar" />
         </processorPath>
-        <module name="gateway" />
         <module name="library-microservice" />
+        <module name="gateway" />
         <module name="book-microservice" />
         <module name="user-microservice" />
         <module name="borrow-microservice" />
