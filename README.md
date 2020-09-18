@@ -15,6 +15,10 @@ Application Web APIREST pour les utilisateurs des bibliothèques d'une grande vi
  
  - Réaliser un batch pour envoyer un email aux utilisateurs qui n'ont pas rendu les ouvrages dans le temps imparti à la fréquence d'une fois par jour.
  
+ 2e Release du projet :
+ 
+ - Correction de l'application en suivant 3 tickets émis par le client.
+ 
  ----------
 Pré-requis
 ----------
@@ -50,12 +54,7 @@ Apache Tomcat v.9
 Restaurer la base de données
 ----------------------------
 
-Pour restaurer la base de données de l'application, vous devez créer un serveur, puis une base de données pour chaque fichier dump.
-Les fichiers avec la terminologie « dump » contiennent les fichiers nécessaires à la création des tables de l'application.
-Les fichiers avec la terminologie « data » contiennent un jeu de donnée de l'application.
-Utilisez la fonction « Restore » puis sélectionnez le fichier de votre choix. Il est noté que pour toute création d’une nouvelle base de données, vous devrez obligatoirement débuté par le fichier « dump » qui contient la création des tables. Le fichier « data » s’utilise sur la base de données du même nom que vous venez de restaurer.
-
-Les terminologies et les adresses employées pour chaque unes des bases de données peuvent être retrouver dans les fichiers applications.properties des différents micro-services.
+Au lancement de l'application, le fichier data.sql présent dans chaques dossiers ressources va automatiquement initier la base de donnée.
 
 
 --------------------------------------------
