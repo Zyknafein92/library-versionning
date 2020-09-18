@@ -28,7 +28,6 @@ export class MyProfilComponent implements OnInit {
     bookReservation : Book;
     messageError: string;
 
-
     constructor(private userService: UserService, private token: TokenStorageService, private router:Router, private borrowService:BorrowService, private bookService: BookService, private authService: AuthService, private reservationService: ReservationService, private toastr: ToastrService) {
     }
 
