@@ -11,6 +11,7 @@ import {Book} from "../../../../models/book";
 import {AuthService} from "../../../../services/security/auth.service";
 import {ReservationService} from "../../../../services/reservation.service";
 import {Reservation} from "../../../../models/reservation";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
     selector: 'app-my-profil',
@@ -28,7 +29,7 @@ export class MyProfilComponent implements OnInit {
     messageError: string;
 
 
-    constructor(private userService: UserService, private token: TokenStorageService, private router:Router, private borrowService:BorrowService, private bookService: BookService, private authService: AuthService, private reservationService: ReservationService) {
+    constructor(private userService: UserService, private token: TokenStorageService, private router:Router, private borrowService:BorrowService, private bookService: BookService, private authService: AuthService, private reservationService: ReservationService, private toastr: ToastrService) {
     }
 
     ngOnInit() {
@@ -99,7 +100,11 @@ export class MyProfilComponent implements OnInit {
     extendBorrow(id: number) {
         this.borrowService.updateBorrowStatus(id).subscribe( res => {
             this.initBorrow();
-        });
+                this.toastr.success('Votre emprunt a été prolongé');
+        },
+            err => {
+            this.toastr.error(err.error.message ||err.error.errors);
+            });
     }
 
     deleteReservation(reservation: Reservation) {
@@ -112,11 +117,13 @@ export class MyProfilComponent implements OnInit {
                     this.reservationService.updateBookReservation(this.bookReservation).subscribe(
                         response => {
                             console.log('book to update: ', response);
+                            this.toastr.success('Votre réservation a été annulé ');
                             this.initReservations();
                         },
                         err => {
                             console.log('Error: ', err.error.message);
                             this.messageError = err.error.message;
+                            this.toastr.error(err.error.message ||err.error.errors);
                         });
                 });
                 this.initReservations();
