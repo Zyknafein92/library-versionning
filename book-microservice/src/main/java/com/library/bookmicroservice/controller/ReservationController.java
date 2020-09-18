@@ -1,8 +1,6 @@
 package com.library.bookmicroservice.controller;
 
-
 import com.library.bookmicroservice.exceptions.ReservationLimitException;
-
 import com.library.bookmicroservice.model.Reservation;
 import com.library.bookmicroservice.services.book.BookDTO;
 import com.library.bookmicroservice.services.reservation.ReservationDTO;
@@ -19,14 +17,12 @@ import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
-
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
 public class ReservationController {
 
     @Autowired
     ReservationService reservationService;
-
 
     @GetMapping(value = "/api/reservation/{id}")
     public ResponseEntity<Optional<Reservation>> getReservation(@PathVariable("id") Long id) {
@@ -41,6 +37,7 @@ public class ReservationController {
         if (reservations == null) return ResponseEntity.noContent().build();
         return new ResponseEntity<>(reservations, HttpStatus.OK);
     }
+
 
     @GetMapping(value = "/api/reservations")
     public ResponseEntity<List<Reservation>> getReservations() {
@@ -60,7 +57,6 @@ public class ReservationController {
     public ResponseEntity<Reservation> createReservation(@Valid @RequestBody ReservationDTO reservationDTO) {
         Reservation reservationToCreate = reservationService.createReservation(reservationDTO);
         return new ResponseEntity<>(reservationToCreate, HttpStatus.CREATED);
-
     }
 
     @PutMapping(value = "api/reservation/checkReservation")
@@ -84,4 +80,3 @@ public class ReservationController {
         return new ResponseEntity<>(reservation.get().getId(), HttpStatus.OK);
         }
     }
-

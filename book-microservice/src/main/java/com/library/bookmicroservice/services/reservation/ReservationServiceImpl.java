@@ -128,14 +128,12 @@ public class ReservationServiceImpl implements ReservationService {
         Book book = bookRepository.getOne(Long.valueOf(bookID));
         Borrow borrow = borrowDatabaseConnect.getBorrowFromDBByBookID(bookID);
         List<Reservation> reservationList = reservationRepository.findAllByBookID(bookID);
+        Date today = new Date();
 
         if(!reservationList.isEmpty()) {
             book.setAvaible(false);
             bookRepository.save(book);
-
             Reservation reservation = reservationList.get(0);
-            Date today = new Date();
-            reservation.setDate(today);
             reservation.setBookReturn(updateAvaibleDate(reservation));
             reservation.setReservationPosition(1);
 
@@ -144,11 +142,7 @@ public class ReservationServiceImpl implements ReservationService {
                 Email email = createAndSendEmail(reservation);
             }
             reservationRepository.save(reservation);
-
-            Email email = emailService.createEmailInformations(reservation);
-            emailService.sendEmailReservation(email);
-
-        } else {
+        } else if(borrow.getId() == null){
             book.setAvaible(true);
             bookRepository.save(book);
         }

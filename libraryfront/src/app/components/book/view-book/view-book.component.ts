@@ -107,7 +107,6 @@ export class ViewBookComponent implements OnInit {
                 console.log('error', err);
                 this.toastr.error(err.error.message ||err.error.errors);
             });
-
     }
 
     deleteReservation(book: Book) {
@@ -119,26 +118,21 @@ export class ViewBookComponent implements OnInit {
                 this.reservationService.updateBookReservation(book).subscribe(
                     response => {
                         console.log('book to update: ', response);
+                        this.initListBook();
                         this.initReservations();
                     },
                     err => {
                         console.log('Error: ', err.error.message);
                         this.messageError = err.error.message;
                     });
-                this.initReservations();
-
                 this.bookService.getBook(book.id).subscribe(data => {
                     this.book = data;
-                    this.initListBook();
                 });
             },
             err => {
                 console.log('Error: ', err.error.message);
                 this.messageError = err.error.message;
             });
-
-
-
     }
 
     checkBookDisponibility(book: Book) {
